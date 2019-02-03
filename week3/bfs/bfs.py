@@ -4,14 +4,40 @@ import sys
 import queue
 
 def distance(adj, s, t):
-    explored = []
-    stack = [s]
-    while stack:
-        node = stack.pop()
-        path = node[-1]
-        if node not in explored:
-
-    return -1
+    # edges from s
+    level = {s: 0}
+    # keep track of predecessor
+    parent = {s: None}
+    # count edges
+    i = 1
+    # what needs to be explored
+    frontier = [s]
+    # loop through graph
+    while frontier:
+        # to be added to frontier
+        next = []
+        # find node
+        for u in frontier:
+            # find neighbors of node
+            for v in adj[u]:
+                # if neighbors aren't explored
+                if v not in level:
+                    # connected node level is dependent of distance
+                    level[v] = i
+                    # keep track of the parent node
+                    parent[v] = u
+                    # explore this neighbor later
+                    next.append(v)
+                    # if you reach target
+                    if v == t:
+                        # how many edges are between s and t
+                        return level[v]
+        # explore neighbors
+        frontier = next
+        # next level of distance
+        i += 1
+    # no path found
+    return - 1
 
 if __name__ == '__main__':
     input = sys.stdin.read()
