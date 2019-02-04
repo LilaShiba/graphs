@@ -5,7 +5,19 @@ import sys
 
 def negative_cycle(adj, cost):
     #write your code here
+    dist=[10**10]*len(adj)
+    dist[0] = 0
+    for i in range(len(adj)):
+        for u in range(len(adj)):
+            for v in adj[u]:
+                v_index = adj[u].index(v)
+                if dist[v] > dist[u] + cost[u][v_index]:
+                    dist[v] = dist[u] + cost[u][v_index]
+                    if i == len(adj) - 1:
+                        return 1
     return 0
+
+
 
 
 if __name__ == '__main__':

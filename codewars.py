@@ -19,13 +19,6 @@ def path_finder(a):
                         next.append((x,y))
                         if (x,y) == t:
                             return level[(x,y)]
-
         frontier = next
         i += 1
     return False
-                    # add connecting nodes to level, parent, and next
-        # add next to frontier
-        # add 1 to i
-
-
-    i = 1
