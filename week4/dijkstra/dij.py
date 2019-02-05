@@ -1,4 +1,6 @@
 #https://brilliant.org/wiki/dijkstras-short-path-finder/
+# https://pastebin.com/3Q9rqGHA
+# https://medium.com/basecs/finding-the-shortest-path-with-a-little-help-from-dijkstra-613149fbdc8e
 graph = {
             's': {'a': 2, 'b': 1},
             'a': {'s': 3, 'b': 4, 'c':8},
@@ -7,6 +9,12 @@ graph = {
             'd': {'b': 1, 'c': 11, 't': 5},
             't': {'c': 3, 'd': 5}
             }
+
+graph2 = {
+        1:{2:7, 3:5},
+        2:{3:2},
+        3:{}
+}
 
 
 def dijkstra(adj, source):
