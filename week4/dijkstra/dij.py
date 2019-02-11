@@ -35,11 +35,11 @@ def dijkstra(adj, source):
                 minNode = node
             elif shortest_distance[node] < shortest_distance[minNode]:
                 minNode = node
-
         for childNode, weight in adj[minNode].items():
             if weight + shortest_distance[minNode] < shortest_distance[childNode]:
                 shortest_distance[childNode] = weight + shortest_distance[minNode]
                 predecessor[childNode] = minNode
+                print(minNode)
         unseenNodes.pop(minNode)
     return shortest_distance
 
