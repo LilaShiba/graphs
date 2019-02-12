@@ -17,6 +17,7 @@ def bellmanford(graph, start):
     # relax baby
     for i in range(len(graph)-1):
         for u in unseenNodes:
+            print('i am u',dist[u])
             for v,w in graph[u].items():
                 if dist[u] != float('Inf') and dist[u] + w < dist[v]:
                     dist[v] = dist[u] + w
@@ -28,4 +29,4 @@ def bellmanford(graph, start):
                 return 'you got a negative cycle oooweee', dist
     return dist
 
-print(bellmanford(graph, 'a'))
+print(bellmanford(graph, 's'))
