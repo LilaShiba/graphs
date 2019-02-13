@@ -1,20 +1,27 @@
-def build_trie(patterns):
+def make_trie(pattern):
     tree = dict()
     tree[0] = {}
     index = 1
 
     for pattern in patterns:
+		# current = {}
         current = tree[0]
         for letter in pattern:
             if letter in current.keys():
                 current = tree[current[letter]]
             else:
+				# current = { }
+				# creates nested dict
+				# first round {0: {'a': 1} }
                 current[letter] = index
+				# creates new dictonary set (row)
+				# first round {0: {'a': 1}, 1:{ } }
                 tree[index] = {}
+				# set current to new dict which is blank
                 current = tree[index]
+				# next level
                 index = index + 1
     return tree
-    # write your code here
 
 trie = build_trie(['ATAGA', 'ATC', 'GAT'])
 
