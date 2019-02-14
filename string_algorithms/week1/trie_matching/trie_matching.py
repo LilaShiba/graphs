@@ -1,18 +1,80 @@
 # python3
 import sys
+def build_trie(patterns):
+    # {}
+    tree = dict()
+    # {0: {}}
+    tree[0] = {}
+    index = 1
 
-NA = -1
+    for pattern in patterns:
+		# current = { 0:{current} }
+        current = tree[0]
+        for letter in pattern:
+            if letter in current.keys():
+                current = tree[current[letter]]
+            else:
+				# current = { }
+				# creates nested dict
+				# first round {0: {'a': 1} }
+                current[letter] = index
+				# creates new dictonary set (row)
+				# first round {0: {'a': 1}, 1:{ } }
+                tree[index] = {}
+				# set current to new dict which is blank
+                current = tree[index]
+				# next level
+                index = index + 1
+    #print(tree)
+    return tree
 
-class Node:
-	def __init__ (self):
-		self.next = [NA] * 4
 
-def solve (text, n, patterns):
-	result = []
 
-	// write your code here
+def solve(text, n, patterns):
+    # hold index values of matches
+    result = []
+    # build trie
+    trie = build_trie(patterns)
 
-	return result
+    n = len(text)
+    # for all letters in text + 1
+    for i in range(n):
+        # if there is a match from current letter to end of text in trie
+        if prefix_trie_matching(text[i:], trie):
+            # add index value to results
+            result.append(i)
+
+    return result
+
+
+def prefix_trie_matching(text, trie):
+    # index counter
+    idx = 0
+    # symbol is first letter
+    symbol = text[idx]
+    # current is {'A': 1, 'G': 5}
+    # first dictonary that is nested
+    current = trie[0]
+
+    while True:
+        # if at end, return true
+        if not current:
+            return True
+        elif symbol in current.keys():
+            # follow nodes that are in text
+            current = trie[current[symbol]]
+            # increase counter to represent index
+            idx = idx + 1
+            # if letters are left to check
+            if idx < len(text):
+                # symbol is next letter
+                symbol = text[idx]
+            else:
+                # end
+                symbol = '@'
+        else:
+            return False
+
 
 text = sys.stdin.readline ().strip ()
 n = int (sys.stdin.readline ().strip ())

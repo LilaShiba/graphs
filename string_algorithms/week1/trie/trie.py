@@ -12,7 +12,7 @@ import sys
 def build_trie(patterns):
     tree = dict()
     tree[0] = {}
-    idx = 0
+    index = 1
 
     for pattern in patterns:
         current = tree[0]
@@ -20,13 +20,12 @@ def build_trie(patterns):
             if letter in current.keys():
                 current = tree[current[letter]]
             else:
-                current[letter] = idx
-                tree[idx] = {}
-                current = tree[idx]
-                idx+=1
-
-    # write your code here
+                current[letter] = index
+                tree[index] = {}
+                current = tree[index]
+                index = index + 1
     return tree
+
 
 
 if __name__ == '__main__':
