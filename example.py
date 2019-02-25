@@ -26,6 +26,7 @@ def path_finder(a):
 
     while frontier:
         next = []
+
         for u in frontier:
             x,y = u
             greedy_boy = dict()
@@ -37,15 +38,21 @@ def path_finder(a):
                         # add (x,y)
                         level[(x,y)] = c
                         # check end case
-                        if (x,y) == t:
-                            return count + int(matrix[x][y])
+                        child_node = int(matrix[x][y])
 
-                        elif parent_node > int(matrix[x][y]):
-                            new_num = parent_node - (int(matrix[x][y]))
+                        if parent_node > child_node:
+                            new_num = parent_node - child_node
                             greedy_boy[(x,y)] = new_num
 
                         else:
-                            greedy_boy[(x,y)] = (int(matrix[x][y])) - parent_node
+                            greedy_boy[(x,y)] = child_node - parent_node
+
+                        if (x,y) == t:
+
+                            if child_node > parent_node:
+                                return count + child_node
+                            elif child_node <= parent_node:
+                                return count + child_node
 
 
 
@@ -55,10 +62,12 @@ def path_finder(a):
             parent_node = int(matrix[px][py])
             child_node = greedy_boy[(i,j)]
 
-            if child_node > parent_node:
-                count = count + child_node
-            elif child_node <= parent_node:
-                count = count + child_node
+            count += child_node
+
+            # if child_node > parent_node:
+            #     count = count + child_node
+            # elif child_node <= parent_node:
+            #     count = count + child_node
 
 
             next.append((i,j))
@@ -104,4 +113,4 @@ e = "\n".join([
   "077770",
   "000007"
 ])
-print(path_finder(g))
+print(path_finder(c))
