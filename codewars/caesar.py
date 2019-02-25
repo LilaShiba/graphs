@@ -7,11 +7,11 @@ def break_caesar(s, shift):
 
     for x in range(len(letters)):
         alpha[letters[x]] = x
-    print(alpha)
+    #print(alpha)
 
     for x in range(len(letters)):
         numeric[x] = letters[x]
-    print(numeric)
+    #print(numeric)
 
     encode = []
 
@@ -21,11 +21,15 @@ def break_caesar(s, shift):
             if new_letter > 26:
                 new_letter = new_letter - 26
             encode.append(numeric[new_letter])
+        if x == ' ':
+            encode.append(' ')
     #    #print(encode)
-    return encode
+    return "".join(encode)
 
 
 
 
 
-print(break_caesar("I Love Pizza",5))
+
+
+print(break_caesar("ShiBas aRe the Best!!!",5))

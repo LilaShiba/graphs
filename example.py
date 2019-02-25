@@ -1,54 +1,73 @@
 # https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
 # Bellman Ford
-
-def find_neighbors(maze, node):
-    x,y = node
-    length = len(maze)
-    neighbors = []
-    for x,y in (x, y-1), (x, y+1), (x-1, y), (x+1,y):
-        if 0<= x < length and 0<= y < length:
-            weight = maze[x][y]
-            neighbors.append([x,y,weight])
-    return neighbors
+import pprint
+# returns x,y,weight
+#def find_neighbors(maze, node):
+    # x,y = node
+    # length = len(maze)
+    # neighbors = []
+    # for x,y in (x, y-1), (x, y+1), (x-1, y), (x+1,y):
+    #     if 0<= x < length and 0<= y < length:
+    #         weight = maze[x][y]
+    #         neighbors.append([x,y,weight])
+    # return neighbors
 
 
 def path_finder(a):
     matrix = list(map(list, a.splitlines()))
-    length = len(matrix)-1
-    adj_list = dict()
-    dist = {}
-    adj_list[(0,0)] = {}
-    current = adj_list[(0,0)]
-    # make adj list with weights
-    for row in range(len(matrix)):
-        for col in range(len(matrix)):
-            adj_list[(row,col)] = find_neighbors(matrix, (row,col))
-            current = adj_list[(row,col)]
+    length = len(matrix)
+    s = (0,0)
+    t = (length - 1,length - 1)
+    level = {s: 0}
+    parent = {s: 0}
+    c = 1
+    frontier = [s]
+    count = 0
 
-    #print(adj_list)
-    for v in adj_list:
-        dist[v] = float('Inf')
-    dist[(0,0)] = int(matrix[0][0])
-    #print(dist)
-    for i in range(len(adj_list)-1):
-        for u in adj_list:
-            r,c = u
-            #print(r,c)
-            for x,y,w in adj_list[(r,c)]:
-                w = int(w)
-                if dist[(r,c)] != float('Inf') and dist[(r,c)] + w < dist[(x,y)]:
-                    dist[(x,y)] = dist[(r,c)] + w
-    return(dist[(length,length)]-dist[(0,0)])
-        #print(x,y,w)
+    while frontier:
+        next = []
+        for u in frontier:
+            x,y = u
+            greedy_boy = dict()
+            parent_node = int(matrix[x][y])
+            px, py, = x, y
+            for x, y in (x, y-1), (x, y+1), (x-1, y), (x+1, y):
+                if 0 <= x < length and 0 <= y < length:
+                    if (x,y) not in level:
+                        # add (x,y)
+                        level[(x,y)] = c
+                        # check end case
+                        if (x,y) == t:
+                            return count + int(matrix[x][y])
 
-    # relax baby
+                        elif parent_node > int(matrix[x][y]):
+                            new_num = parent_node - (int(matrix[x][y]))
+                            greedy_boy[(x,y)] = new_num
 
-    # for j in unseenNodes:
-    #     x,y = j
-    #     neighbors = find_neighbors(matrix, (x,y))
-    #     for z in neighbors:
-    #         adj_list[(x,y)] = neighbors
-    # return adj_list
+                        else:
+                            greedy_boy[(x,y)] = (int(matrix[x][y])) - parent_node
+
+
+
+            i,j = min(greedy_boy.keys(), key=(lambda k: greedy_boy[k]))
+
+            print(greedy_boy)
+            parent_node = int(matrix[px][py])
+            child_node = greedy_boy[(i,j)]
+
+            if child_node > parent_node:
+                count = count + child_node
+            elif child_node <= parent_node:
+                count = count + child_node
+
+
+            next.append((i,j))
+
+
+        frontier = next
+        c += 1
+    print(count)
+
 
 
 
@@ -62,4 +81,27 @@ f = "\n".join([
   "007777"
 ])
 
-print(path_finder(f))
+c = "\n".join([
+  "010",
+  "101",
+  "010"
+])
+
+g = "\n".join([
+  "000000",
+  "000000",
+  "000000",
+  "000010",
+  "000109",
+  "001010"
+])
+
+e = "\n".join([
+  "700000",
+  "277773",
+  "077770",
+  "077770",
+  "077770",
+  "000007"
+])
+print(path_finder(g))
