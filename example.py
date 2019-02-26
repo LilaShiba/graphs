@@ -1,6 +1,7 @@
 # https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
 # Bellman Ford
 import pprint
+<<<<<<< HEAD
 # returns x,y,weight
 #def find_neighbors(maze, node):
     # x,y = node
@@ -20,10 +21,13 @@ def find_neighbors(maze, node):
             weight = maze[x][y]
             neighbors.append([x,y,weight])
     return neighbors
+=======
+>>>>>>> 2564153e81bdd956f405932f415a3d1bc9f40603
 
 def path_finder(a):
     matrix = list(map(list, a.splitlines()))
     length = len(matrix)
+<<<<<<< HEAD
     #dist=[float('inf')]*len(adj)
     shortest_distance = {}
     predecessor = {}
@@ -69,7 +73,52 @@ def path_finder(a):
 
         unseenNodes.pop(minNode)
     return shortest_distance
+=======
+    s = (0,0)
+    t = (length - 1,length - 1)
+    start = int(matrix[0][0])
+    climbs = dict()
+    explored = []
 
+
+    # create climbs
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            matrix[row][col] = int(matrix[row][col])
+            climbs[(row,col)] = 1000
+
+    climbs[(0,0)] = 0
+    print(climbs)
+
+
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            if (row,col) != explored:
+                x,y = row, col
+                for x,y in (x, y-1), (x, y+1), (x-1,y), (x+1,y):
+                    if 0 <= x < length and 0<= y < length:
+                        explored.append((row,col))
+                        # relax
+
+                        if matrix[row][col] > matrix[x][y]:
+                            if matrix[row][col] - matrix[x][y] < climbs[(x,y)]:
+                                climbs[(x,y)] = climbs[(row,col)] + (matrix[row][col] - matrix[x][y])
+
+                        elif matrix[row][col] < matrix[x][y]:
+                            if matrix[x][y] - matrix[row][col] < climbs[(x,y)]:
+                                climbs[(x,y)] = climbs[(row,col)]+ (matrix[x][y]- matrix[row][col])
+
+                        else:
+                            climbs[(x,y)] = climbs[(row,col)]
+
+
+
+
+
+
+>>>>>>> 2564153e81bdd956f405932f415a3d1bc9f40603
+
+    return climbs
 
 
 
@@ -86,7 +135,7 @@ f = "\n".join([
 ])
 
 c = "\n".join([
-  "010",
+  "110",
   "101",
   "010"
 ])
@@ -108,4 +157,14 @@ e = "\n".join([
   "077770",
   "000007"
 ])
+<<<<<<< HEAD
 print(path_finder(e))
+=======
+
+b = "\n".join([
+  "010",
+  "010",
+  "010"
+])
+pprint.pprint(path_finder(b))
+>>>>>>> 2564153e81bdd956f405932f415a3d1bc9f40603
