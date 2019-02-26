@@ -19,6 +19,7 @@ def path_finder(a):
     # track amount of climbs
     climbs = dict()
     adj_list = dict()
+    length = len(matrix)
 
     # create climbs & adj_list
     for row in range(len(matrix)):
@@ -61,22 +62,23 @@ def path_finder(a):
                 if matrix[x][y] == matrix[cx][cy]:
                     climbs[(cx,cy)] = climbs[(x,y)]
         unseenNodes.pop(minNode)
+    print(climbs)
 
-    return climbs
+    return climbs[(length-1,length-1)]
 
 
 
 # 12
 f = "\n".join([
-  "777000023",
-  "007000343",
-  "007000123",
-  "007000432",
-  "007000343",
-  "777777234",
-  "997777234",
-  "117777234",
-  "117777234"
+  "77700220",
+  "00700330",
+  "00723220",
+  "00732330",
+  "00743220",
+  "10000010",
+  "01001001",
+  '00000010'
+
 ])
 c = "\n".join([
   "110",
@@ -108,4 +110,4 @@ b = "\n".join([
   "010",
   "010"
 ])
-pprint.pprint(path_finder(c))
+pprint.pprint(path_finder(f))
