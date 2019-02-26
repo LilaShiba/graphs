@@ -22,6 +22,29 @@ def encrypt(text,s):
   return encrypted
 
 
+def decrypt(text,s):
+  letters = list('$abcdefghijklmnopqrstuvwxyz')
+  alpha = dict()
+  new_string = []
+
+  # create hash for key = letter value = number
+  for x in range(len(letters)):
+    alpha[letters[x]] = x
+
+  # traverse text
+  for i in range(len(text)):
+    char = text[i]
+    ans = (alpha[char] - s % 26)
+    if ans <= 0:
+      ans = ans + 26
+    new_string.append(letters[ans])
+
+  # return string
+  encrypted = ''.join(new_string)
+  return encrypted
+
+
+print(decrypt('zy',25))
 print(encrypt('az',25))
 # def break_caesar(s, shift):
 #     s = s.lower()
@@ -56,4 +79,4 @@ print(encrypt('az',25))
 
 
 
-print(break_caesar("ShiBas aRe the Best!!!",5))
+#print(break_caesar("ShiBas aRe the Best!!!",5))
