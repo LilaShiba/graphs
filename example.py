@@ -11,71 +11,66 @@ import pprint
     #         weight = maze[x][y]
     #         neighbors.append([x,y,weight])
     # return neighbors
-
+def find_neighbors(maze, node):
+    x,y = node
+    length = len(maze)
+    neighbors = []
+    for x,y in (x, y-1), (x, y+1), (x-1, y), (x+1,y):
+        if 0<= x < length and 0<= y < length:
+            weight = maze[x][y]
+            neighbors.append([x,y,weight])
+    return neighbors
 
 def path_finder(a):
     matrix = list(map(list, a.splitlines()))
     length = len(matrix)
-    s = (0,0)
-    t = (length - 1,length - 1)
-    level = {s: 0}
-    parent = {s: 0}
-    c = 1
-    frontier = [s]
-    count = 0
+    #dist=[float('inf')]*len(adj)
+    shortest_distance = {}
+    predecessor = {}
+    path = []
+    adj = dict()
 
-    while frontier:
-        next = []
+    for row in range(len(matrix)):
+        for col in range(len(matrix)):
+            adj[(row,col)] = find_neighbors(matrix, (row,col))
+            current = adj[(row,col)]
 
-        for u in frontier:
-            x,y = u
-            greedy_boy = dict()
-            parent_node = int(matrix[x][y])
-            px, py, = x, y
-            for x, y in (x, y-1), (x, y+1), (x-1, y), (x+1, y):
-                if 0 <= x < length and 0 <= y < length:
-                    if (x,y) not in level:
-                        # add (x,y)
-                        level[(x,y)] = c
-                        # check end case
-                        child_node = int(matrix[x][y])
+    # set all unexplored nodes to inf
+    for vertex in adj:
+        shortest_distance[vertex] = float('inf')
+    shortest_distance[(0,0)] = int(matrix[0][0])
 
-                        if parent_node > child_node:
-                            new_num = parent_node - child_node
-                            greedy_boy[(x,y)] = new_num
+    unseenNodes = adj
+    print(shortest_distance)
 
-                        else:
-                            greedy_boy[(x,y)] = child_node - parent_node
+    # search time
+    while unseenNodes:
+        minNode = None
+        # grab first unseenNode
+        for node in unseenNodes:
+            # set minNode
+            if minNode is None:
+                minNode = node
+            elif shortest_distance[node] < shortest_distance[minNode]:
+                minNode = node
+        # check neighbors
+        for x,y,weight in adj[minNode]:
+            weight = int(weight)
+            child_node = x,y
 
-                        if (x,y) == t:
-
-                            if child_node > parent_node:
-                                return count + child_node
-                            elif child_node <= parent_node:
-                                return count + child_node
-
-
-
-            i,j = min(greedy_boy.keys(), key=(lambda k: greedy_boy[k]))
-
-            print(greedy_boy)
-            parent_node = int(matrix[px][py])
-            child_node = greedy_boy[(i,j)]
-
-            count += child_node
-
-            # if child_node > parent_node:
-            #     count = count + child_node
-            # elif child_node <= parent_node:
-            #     count = count + child_node
+            # relax
+            if weight + shortest_distance[minNode] < shortest_distance[child_node]:
+                shortest_distance[child_node] = weight + shortest_distance[minNode]
+                # increase minNode for each level
+                predecessor[(x,y)] = minNode
+                #print(minNode)
 
 
-            next.append((i,j))
+
+        unseenNodes.pop(minNode)
+    return shortest_distance
 
 
-        frontier = next
-        c += 1
-    print(count)
 
 
 
@@ -113,4 +108,4 @@ e = "\n".join([
   "077770",
   "000007"
 ])
-print(path_finder(c))
+print(path_finder(e))
