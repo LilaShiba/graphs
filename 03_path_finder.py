@@ -1,10 +1,4 @@
-# https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
-# Bellman Ford
 import pprint
-
-# todo add min node
-# todo cycle through all nodes
-# todo pop off min nodes from set of nodes
 
 def path_finder(a):
     matrix = list(map(list, a.splitlines()))
@@ -33,12 +27,10 @@ def path_finder(a):
                             climbs[(x,y)] = climbs[(row,col)] + (matrix[row][col] - matrix[x][y])
                     # if child > parent
                     elif matrix[row][col] < matrix[x][y]:
-                        # if child - parent < value in climbs for child
                         if matrix[x][y] - matrix[row][col] < climbs[(x,y)]:
                             climbs[(x,y)] = climbs[(row,col)]+ (matrix[x][y]- matrix[row][col])
                     # if they are equal
                     else:
-                        # carry over climb count
                         climbs[(x,y)] = climbs[(row,col)]
 
     print(climbs)
