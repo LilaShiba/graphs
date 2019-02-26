@@ -40,7 +40,7 @@ def path_finder(a):
                                 climbs[(x,y)] = climbs[(row,col)]+ (matrix[x][y]- matrix[row][col])
 
                         else:
-                            climbs[(x,y)] = climbs[(0,0)]
+                            climbs[(x,y)] = climbs[(row,col)]
 
 
 
@@ -87,4 +87,10 @@ e = "\n".join([
   "077770",
   "000007"
 ])
-pprint.pprint(path_finder(f))
+
+b = "\n".join([
+  "010",
+  "010",
+  "010"
+])
+pprint.pprint(path_finder(b))
