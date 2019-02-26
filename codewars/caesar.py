@@ -1,30 +1,54 @@
 # https://www.codewars.com/kata/break-the-caesar/train/python
-def break_caesar(s, shift):
-    s = s.lower()
-    alpha = dict()
-    numeric = dict()
-    letters = list('$abcdefghijklmnopqrstuvwxyz')
 
-    for x in range(len(letters)):
-        alpha[letters[x]] = x
-    #print(alpha)
+def encrypt(text,s):
+  letters = list('$abcdefghijklmnopqrstuvwxyz')
+  alpha = dict()
+  new_string = []
 
-    for x in range(len(letters)):
-        numeric[x] = letters[x]
-    #print(numeric)
+  # create hash for key = letter value = number
+  for x in range(len(letters)):
+    alpha[letters[x]] = x
 
-    encode = []
+  # traverse text
+  for i in range(len(text)):
+    char = text[i]
+    ans = (alpha[char] + s % 26)
+    if ans > 26:
+      ans = ans - 26
+    new_string.append(letters[ans])
 
-    for x in s:
-        if x in letters:
-            new_letter = alpha[x] + shift
-            if new_letter > 26:
-                new_letter = new_letter - 26
-            encode.append(numeric[new_letter])
-        if x == ' ':
-            encode.append(' ')
-    #    #print(encode)
-    return "".join(encode)
+  # return string
+  encrypted = ''.join(new_string)
+  return encrypted
+
+
+print(encrypt('az',25))
+# def break_caesar(s, shift):
+#     s = s.lower()
+#     alpha = dict()
+#     numeric = dict()
+#     letters = list('$abcdefghijklmnopqrstuvwxyz')
+#
+#     for x in range(len(letters)):
+#         alpha[letters[x]] = x
+#     #print(alpha)
+#
+#     for x in range(len(letters)):
+#         numeric[x] = letters[x]
+#     print(numeric)
+#
+#     encode = []
+#
+#     for x in s:
+#         if x in letters:
+#             new_letter = alpha[x] + shift
+#             if new_letter > 26:
+#                 new_letter = new_letter - 26
+#             encode.append(numeric[new_letter])
+#         if x == ' ':
+#             encode.append(' ')
+#     #    #print(encode)
+#     return "".join(encode)
 
 
 
