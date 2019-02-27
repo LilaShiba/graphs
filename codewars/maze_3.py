@@ -1,46 +1,69 @@
 # https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
 # Bellman Ford
+import pprint
 
-def find_neighbors(maze, node):
-    x,y = node
-    length = len(maze)
+# todo add min node
+# todo cycle through all nodes
+# todo pop off min nodes from set of nodes
+def find_neighbors(row,col,matrix):
     neighbors = []
-    for x,y in (x, y-1), (x, y+1), (x-1, y), (x+1,y):
-        if 0<= x < length and 0<= y < length:
-            weight = maze[x][y]
-            neighbors.append([x,y,weight])
+    length = len(matrix)
+    x,y = row,col
+    for x,y in (x, y-1), (x, y+1), (x-1,y), (x+1,y):
+        if 0 <= x < length and 0<= y < length:
+            neighbors.append((x,y,int(matrix[x][y])))
     return neighbors
 
-
 def path_finder(a):
-    matrix = list(map(list, a.splitlines()))
-    length = len(matrix)-1
+    matrix =  list(map(list, a.splitlines()))
+    # track amount of climbs
+    climbs = dict()
     adj_list = dict()
-    dist = {}
-    adj_list[(0,0)] = {}
-    current = adj_list[(0,0)]
-    # make adj list with weights
+    length = len(matrix)
+
+    # create climbs & adj_list
     for row in range(len(matrix)):
         for col in range(len(matrix)):
-            adj_list[(row,col)] = find_neighbors(matrix, (row,col))
-            current = adj_list[(row,col)]
+            matrix[row][col] = int(matrix[row][col])
+            climbs[(row,col)] = 1000
+            adj_list[(row,col)] = find_neighbors(row,col,matrix)
+    climbs[(0,0)] = 0
 
-    #print(adj_list)
-    for v in adj_list:
-        dist[v] = float('Inf')
-    dist[(0,0)] = int(matrix[0][0])
-    #print(dist)
-    # bellman ford
-    for i in range(len(adj_list)-1):
-        for u in adj_list:
-            r,c = u
-            #print(r,c)
-            for x,y,w in adj_list[(r,c)]:
-                w = int(w)
-                if dist[(r,c)] != float('Inf') and dist[(r,c)] + w < dist[(x,y)]:
-                    dist[(x,y)] = dist[(r,c)] + w
-    print(dist)
-    return(2*(dist[(length,length)]-dist[(0,0)]))
+    unseenNodes = adj_list
+
+    while unseenNodes:
+        minNode = None
+        for node in unseenNodes:
+            if minNode is None:
+                minNode = node
+            elif climbs[node] < climbs[minNode]:
+                minNode = node
+
+        for cx, cy, weight in adj_list[minNode]:
+
+            # relax
+            # if parent > child
+            x,y = minNode
+
+            # if child is larger than parent in matrix
+            if matrix[cx][cy] > matrix[x][y]:
+                # weight between u -> v
+                diff = matrix[cx][cy] - matrix[x][y]
+                if diff + climbs[(x,y)] < climbs[(cx,cy)]:
+                    climbs[(cx,cy)] = diff + climbs[(x,y)]
+
+            #if parent is larger than child
+            elif matrix[cx][cy] < matrix[x][y]:
+                diff = matrix[x][y] - matrix[cx][cy]
+                if diff + climbs[(x,y)] < climbs[(cx,cy)]:
+                    climbs[(cx,cy)] = diff + climbs[(x,y)]
+
+            else:
+                if matrix[x][y] == matrix[cx][cy]:
+                    climbs[(cx,cy)] = climbs[(x,y)]
+        unseenNodes.pop(minNode)
+
+    return climbs[(length-1,length-1)]
         #print(x,y,w)
 
     # relax baby

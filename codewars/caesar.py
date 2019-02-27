@@ -1,6 +1,7 @@
 # https://www.codewars.com/kata/break-the-caesar/train/python
 
 def encrypt(text,s):
+  text = text.lower()
   letters = list('$abcdefghijklmnopqrstuvwxyz')
   alpha = dict()
   new_string = []
@@ -11,11 +12,14 @@ def encrypt(text,s):
 
   # traverse text
   for i in range(len(text)):
-    char = text[i]
-    ans = (alpha[char] + s % 26)
-    if ans > 26:
-      ans = ans - 26
-    new_string.append(letters[ans])
+    if text[i] != ' ':
+        char = text[i]
+        ans = (alpha[char] + s % 26)
+        if ans > 26:
+            ans = ans - 26
+        new_string.append(letters[ans])
+    else:
+        new_string.append(' ')
 
   # return string
   encrypted = ''.join(new_string)
@@ -45,7 +49,7 @@ def decrypt(text,s):
 
 
 print(decrypt('zy',25))
-print(encrypt('az',25))
+print(encrypt('Python Warrior',25))
 # def break_caesar(s, shift):
 #     s = s.lower()
 #     alpha = dict()
