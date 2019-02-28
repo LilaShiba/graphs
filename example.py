@@ -2,47 +2,43 @@
 import pprint
 
 def path_finder(a):
+    # make 2d array
     matrix =  list(map(list, a.splitlines()))
-    # track amount of climbs
+    # shortest distance from start
     climbs = dict()
+    # length of maze
     length = len(matrix)
+    # nodes to traverse
     unseenNodes = []
+    # end of maze
     endo = (length-1,length-1)
-
-    # create climbs & unseenNodes list
-    for row in range(len(matrix)):
-        for col in range(len(matrix)):
-            matrix[row][col] = int(matrix[row][col])
-            climbs[(row,col)] = float('Inf')
-            unseenNodes.append((row,col))
+    # transform string to int
+    matrix = [[int(y) for y in x] for x in matrix]
+    # flatten 2D array to 1D
+    unseenNodes = [[(x,y) for y in range(length)] for x in range(length)]
+    unseenNodes = [item for sublist in unseenNodes for item in sublist]
+    # set distances to inf
+    climbs = {key:float('Inf') for key in unseenNodes}
+    # start distance is 0
     climbs[(0,0)] = 0
 
     while unseenNodes:
         minNode = None
-        for z,y in unseenNodes:
-            if minNode is None:
-                minNode = z,y
-            elif climbs[(z,y)] < climbs[minNode]:
-                minNode = z,y
-        cx, cy = minNode
-
+        minNode = min([(climbs[(x,y)], (x,y)) for (x,y) in unseenNodes])[1]
         # check out neighbors
+        cx, cy = minNode
         for cx, cy, in (cx, cy-1), (cx, cy+1), (cx-1,cy), (cx+1,cy):
-            if 0<= cx < length and 0<= cy < length and (cx,cy) in unseenNodes:
-
-
+            if 0<= cx < length and 0<= cy < length:
         # relax
                 x,y = minNode
                 # if parent and child are same level
                 if matrix[cx][cy] == matrix[x][y]:
                     climbs[(cx,cy)] = climbs[(x,y)]
-
                 # if there is a cost
                 else:
                     diff = abs(matrix[cx][cy] - matrix[x][y])
                     if diff + climbs[(x,y)] < climbs[(cx,cy)]:
                         climbs[(cx,cy)] = diff + climbs[(x,y)]
-
                 # found the end
                 if (cx,cy) == endo:
                     return climbs[(length-1,length-1)]

@@ -1,80 +1,68 @@
 # https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
-# Bellman Ford
 import pprint
-
-# todo add min node
-# todo cycle through all nodes
-# todo pop off min nodes from set of nodes
-def find_neighbors(row,col,matrix):
-    neighbors = []
-    length = len(matrix)
-    x,y = row,col
-    for x,y in (x, y-1), (x, y+1), (x-1,y), (x+1,y):
-        if 0 <= x < length and 0<= y < length:
-            neighbors.append((x,y,int(matrix[x][y])))
-    return neighbors
 
 def path_finder(a):
     matrix =  list(map(list, a.splitlines()))
     # track amount of climbs
     climbs = dict()
-    adj_list = dict()
     length = len(matrix)
+    unseenNodes = []
+    endo = (length-1,length-1)
 
-    # create climbs & adj_list
+    # create climbs & unseenNodes list
     for row in range(len(matrix)):
         for col in range(len(matrix)):
             matrix[row][col] = int(matrix[row][col])
-            climbs[(row,col)] = 1000
-            adj_list[(row,col)] = find_neighbors(row,col,matrix)
+            climbs[(row,col)] = float('Inf')
+            unseenNodes.append((row,col))
     climbs[(0,0)] = 0
-
-    unseenNodes = adj_list
 
     while unseenNodes:
         minNode = None
-        for node in unseenNodes:
+        #minNode = max(climbs.keys(), key=(lambda k: my_dict[k]))
+        #minNode = min(climbs.keys(), key=(lambda k: unseenNodes[k]))
+        for z,y in unseenNodes:
             if minNode is None:
-                minNode = node
-            elif climbs[node] < climbs[minNode]:
-                minNode = node
+                minNode = z,y
+            elif climbs[(z,y)] < climbs[minNode]:
+                minNode = z,y
 
-        for cx, cy, weight in adj_list[minNode]:
-
-            # relax
-            # if parent > child
-            x,y = minNode
-
-            # if child is larger than parent in matrix
-            if matrix[cx][cy] > matrix[x][y]:
-                # weight between u -> v
-                diff = matrix[cx][cy] - matrix[x][y]
-                if diff + climbs[(x,y)] < climbs[(cx,cy)]:
-                    climbs[(cx,cy)] = diff + climbs[(x,y)]
-
-            #if parent is larger than child
-            elif matrix[cx][cy] < matrix[x][y]:
-                diff = matrix[x][y] - matrix[cx][cy]
-                if diff + climbs[(x,y)] < climbs[(cx,cy)]:
-                    climbs[(cx,cy)] = diff + climbs[(x,y)]
-
-            else:
-                if matrix[x][y] == matrix[cx][cy]:
+        # check out neighbors
+        cx, cy = minNode
+        for cx, cy, in (cx, cy-1), (cx, cy+1), (cx-1,cy), (cx+1,cy):
+            if 0<= cx < length and 0<= cy < length and (cx,cy) in unseenNodes:
+        # relax
+                x,y = minNode
+                # if parent and child are same level
+                if matrix[cx][cy] == matrix[x][y]:
                     climbs[(cx,cy)] = climbs[(x,y)]
-        unseenNodes.pop(minNode)
 
-    return climbs[(length-1,length-1)]
+                # if there is a cost
+                else:
+                    diff = abs(matrix[cx][cy] - matrix[x][y])
+                    if diff + climbs[(x,y)] < climbs[(cx,cy)]:
+                        climbs[(cx,cy)] = diff + climbs[(x,y)]
+
+                # found the end
+                if (cx,cy) == endo:
+                    return climbs[(length-1,length-1)]
+        unseenNodes.remove((minNode))
 
 
+
+
+# 12
 f = "\n".join([
-  "777000",
-  "007000",
-  "007000",
-  "007000",
-  "007000",
-  "007777"
-])
+  "77700220",
+  "00700330",
+  "00723220",
+  "00732330",
+  "00743220",
+  "10000010",
+  "01001001",
+  '00000010'
 
+])
 c = "\n".join([
   "110",
   "101",
@@ -105,4 +93,6 @@ b = "\n".join([
   "010",
   "010"
 ])
-pprint.pprint(path_finder(b))
+# ans = 62
+m = [['8', '6', '5', '2', '1', '5', '1', '8', '0', '1', '6', '1', '7', '7', '5', '4', '0', '8', '3', '3', '1', '7'], ['0', '2', '5', '5', '4', '4', '0', '4', '6', '0', '1', '4', '4', '2', '4', '3', '9', '6', '9', '9', '2', '5'], ['1', '9', '7', '8', '6', '9', '0', '8', '1', '7', '2', '7', '0', '9', '3', '8', '7', '5', '2', '1', '5', '6'], ['6', '1', '3', '5', '9', '2', '2', '8', '3', '9', '3', '1', '9', '0', '3', '1', '1', '1', '6', '5', '8', '7'], ['1', '2', '9', '7', '5', '1', '3', '3', '6', '2', '1', '7', '8', '0', '1', '8', '3', '3', '3', '8', '8', '9'], ['6', '6', '2', '6', '6', '6', '8', '8', '0', '1', '9', '8', '9', '0', '6', '5', '0', '6', '0', '4', '2', '0'], ['5', '2', '3', '1', '9', '7', '6', '9', '5', '5', '8', '3', '7', '9', '3', '6', '7', '7', '9', '0', '2', '3'], ['6', '6', '3', '7', '0', '2', '2', '1', '8', '3', '9', '5', '8', '9', '4', '3', '3', '1', '7', '0', '4', '8'], ['0', '1', '9', '1', '4', '5', '2', '5', '8', '9', '9', '4', '7', '7', '7', '9', '7', '1', '4', '7', '1', '2'], ['6', '9', '4', '8', '1', '5', '8', '9', '0', '4', '2', '4', '8', '3', '4', '3', '6', '0', '5', '9', '5', '4'], ['4', '8', '6', '6', '3', '4', '4', '8', '3', '2', '1', '2', '5', '3', '8', '7', '4', '2', '7', '5', '6', '8'], ['7', '4', '0', '8', '2', '5', '2', '8', '8', '1', '2', '3', '4', '3', '9', '2', '9', '3', '2', '5', '5', '6'], ['8', '9', '4', '6', '4', '6', '2', '1', '7', '1', '5', '9', '8', '4', '3', '5', '9', '0', '9', '3', '4', '0'], ['4', '1', '3', '9', '5', '8', '6', '4', '3', '8', '4', '9', '0', '3', '1', '8', '7', '2', '9', '2', '9', '1'], ['6', '7', '6', '5', '3', '7', '7', '2', '9', '0', '6', '5', '1', '1', '3', '0', '5', '0', '1', '9', '6', '9'], ['5', '2', '0', '2', '4', '1', '2', '3', '5', '9', '5', '5', '3', '8', '3', '3', '9', '9', '0', '3', '8', '9'], ['0', '9', '9', '0', '3', '8', '1', '3', '8', '6', '8', '8', '6', '5', '2', '2', '0', '4', '9', '0', '6', '8'], ['8', '0', '5', '4', '9', '3', '2', '6', '9', '7', '8', '4', '2', '9', '0', '5', '5', '7', '3', '5', '8', '4'], ['6', '0', '0', '3', '4', '9', '5', '4', '7', '9', '9', '4', '9', '2', '5', '7', '9', '1', '3', '2', '9', '7'], ['3', '5', '0', '6', '2', '3', '3', '8', '6', '6', '9', '9', '7', '0', '2', '3', '3', '6', '6', '8', '9', '0'], ['4', '6', '3', '1', '3', '9', '4', '0', '6', '4', '2', '3', '2', '1', '0', '3', '6', '9', '8', '1', '1', '8'], ['3', '9', '2', '8', '8', '4', '8', '8', '8', '3', '9', '3', '8', '8', '5', '0', '5', '6', '8', '4', '1', '2']]
+pprint.pprint(path_finder(c))
