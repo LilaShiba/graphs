@@ -1,10 +1,10 @@
-import random
+# https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
 import time
 
 start_time = time.time()
 
 def path_finder(matrix):
-    #matrix =  list(map(list, graph.splitlines()))
+    matrix =  list(map(list, matrix.splitlines()))
     length = len(matrix)
     start = (0,0)
     goal = (length-1, length-1)
@@ -45,9 +45,29 @@ def path_finder(matrix):
                     visited[(cx, cy)] = weight
                     path[(cx,cy)] = minNode
 
-matrix = [[random.randint(0,10) for x in range(5)]for y in range(5)]
-num, path = path_finder(matrix)
+# 9
+f = "\n".join([
+  "77700220",
+  "00700330",
+  "00723220",
+  "00732330",
+  "00743220",
+  "10000010",
+  "01001001",
+  '00000010'
+
+])
+print(path_finder(f))
 
 print("---%s seconds" %(time.time()- start_time))
 
-print(num, path)
+
+
+def matrix_addition(a, b):
+    ans = []
+    for x in range(len(a)):
+        new_list = []
+        for y in range(len(a)):
+            new_list.append(a[x][y] + b[x][y])
+            ans.append(new_list)
+    return ans
