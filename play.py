@@ -3,15 +3,12 @@ import time
 
 start_time = time.time()
 
-def path_finder(matrix):
-    matrix =  list(map(list, matrix.splitlines()))
+def path_finder(matrix,start,goal):
     length = len(matrix)
-    start = (0,0)
-    goal = (length-1, length-1)
     visited = {}
     nodes = []
-    path = {}
-    matrix = [[int(y) for y in x] for x in matrix]
+    path = []
+    spelled = []
 
 
     for x in range(length):
@@ -30,8 +27,10 @@ def path_finder(matrix):
                 elif visited[node] < visited[minNode]:
                     minNode = node
 
-        if minNode == (length-1, length-1):
-            return visited[length-1, length-1], path
+
+        if minNode == goal:
+            path.append(goal)
+            break
 
         nodes.remove(minNode)
         current_weight = visited[minNode]
@@ -40,34 +39,42 @@ def path_finder(matrix):
         directions = [(x, y+1), (x, y-1), (x+1, y), (x-1, y)]
         for cx,cy in directions:
             if (cx,cy) in nodes:
-                weight = visited[(x,y)] + abs(matrix[cx][cy]- matrix[x][y])
+                weight = visited[(x,y)] + matrix[cx][cy]
                 if (cx,cy) not in visited or weight < visited[(cx,cy)]:
                     visited[(cx, cy)] = weight
-                    path[(cx,cy)] = minNode
+                    if minNode not in path and minNode != start:
+                        path.append(minNode)
+    px, py = start
+    for x,y in path:
+        if x > px:
+            spelled.append('Down')
+        elif x < px:
+            spelled.append('Up')
+        elif y < py:
+            spelled.append('Left')
+        elif y > py:
+            spelled.append('Right')
+        px,py = x,y
+    return(spelled)
+
+
 
 # 9
-f = "\n".join([
-  "77700220",
-  "00700330",
-  "00723220",
-  "00732330",
-  "00743220",
-  "10000010",
-  "01001001",
-  '00000010'
+f = [
+    [1,9,1],
+    [2,9,1],
+    [2,1,1]
+    ]
 
-])
-print(path_finder(f))
+# ["down", "down", "right", "right", "up", "up"]
+
+g= [
+    [1,4,1],
+    [1,9,1],
+    [1,1,1]
+    ]
+
+print(path_finder(g,(0,0), (0,2)))
+
 
 print("---%s seconds" %(time.time()- start_time))
-
-
-
-def matrix_addition(a, b):
-    ans = []
-    for x in range(len(a)):
-        new_list = []
-        for y in range(len(a)):
-            new_list.append(a[x][y] + b[x][y])
-            ans.append(new_list)
-    return ans
