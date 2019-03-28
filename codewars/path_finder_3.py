@@ -22,6 +22,7 @@ def path_finder(matrix):
 
         directions = [(x, y+1), (x, y-1), (x+1, y), (x-1, y)]
         real_neighbors = [(x,y) for (x,y) in directions if 0<= x < length and 0<= y < length]
+
         for cx,cy in real_neighbors:
             weight = visited[(x,y)] + abs(int(matrix[cx][cy])- int(matrix[x][y]))
             z = weight + (abs(cx - goal[0]) + abs(cy - goal[1]))
