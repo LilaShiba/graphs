@@ -7,55 +7,46 @@ def path_finder(matrix,start,goal):
     length = len(matrix)
     visited = {}
     nodes = []
-    path = []
+    path = {}
+    paths = []
     spelled = []
-
+    x,y = start
+    unseenNodes = [(x,y,0)]
 
     for x in range(length):
         for y in range(length):
             nodes.append((x,y))
+            visited[(x,y)] = float('Inf')
     visited[(0,0)] = 0
 
-
-    while nodes:
-        # find minNode
-        minNode = None
-        for node in nodes:
-            if node in visited:
-                if minNode == None:
-                    minNode = node
-                elif visited[node] < visited[minNode]:
-                    minNode = node
-
-
-        if minNode == goal:
-            path.append(goal)
+    while unseenNodes:
+        unseenNodes = sorted(unseenNodes, key = lambda x: x[2])
+        x,y,_ = unseenNodes[0]
+        del unseenNodes[0]
+        current_weight = visited[(x,y)]
+        px, py = x,y
+        if (x,y) == goal:
             break
 
-        nodes.remove(minNode)
-        current_weight = visited[minNode]
-
-        x,y = minNode
         directions = [(x, y+1), (x, y-1), (x+1, y), (x-1, y)]
-        for cx,cy in directions:
-            if (cx,cy) in nodes:
-                weight = visited[(x,y)] + matrix[cx][cy]
-                if (cx,cy) not in visited or weight < visited[(cx,cy)]:
-                    visited[(cx, cy)] = weight
-                    if minNode not in path and minNode != start:
-                        path.append(minNode)
-    px, py = start
-    for x,y in path:
-        if x > px:
-            spelled.append('Down')
-        elif x < px:
-            spelled.append('Up')
-        elif y < py:
-            spelled.append('Left')
-        elif y > py:
-            spelled.append('Right')
-        px,py = x,y
-    return(spelled)
+        real_neighbors = [(x,y) for (x,y) in directions if (x,y) in nodes]
+
+        for cx,cy in real_neighbors:
+            weight =  current_weight + matrix[cx][cy]
+            z = weight + (abs(cx - goal[0]) + abs(cy - goal[1]))
+            if z < visited[(cx,cy)]:
+                visited[(cx,cy)] = weight
+                path[(cx,cy)] = (px,py)
+                unseenNodes.append((cx,cy,z))
+
+
+
+    currentNode = goal
+    while currentNode != start:
+        paths.insert(0,currentNode)
+        currentNode = path[currentNode]
+    print(paths)
+
 
 
 
@@ -71,10 +62,10 @@ f = [
 g= [
     [1,4,1],
     [1,9,1],
-    [1,1,1]
+    [1,0,0]
     ]
 
-print(path_finder(g,(0,0), (0,2)))
+print(path_finder(g,(0,0), (1,2)))
 
 
 print("---%s seconds" %(time.time()- start_time))

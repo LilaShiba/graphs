@@ -1,85 +1,87 @@
+import time
+start_time = time.time()
+
 def cheapest_path(matrix,start,goal):
-    length = len(matrix)
-    visited = {}
-    path = {}
-    spelled = []
+    shortest_path = {}
+    unseenNodes = []
+    exploring_weights = {}
+    parent = {}
     paths = []
-    testy = []
+    spelled = []
 
-    # fill nodes and visited init to infi
-    nodes = [[(x,y) for y in range(len(matrix[0]))] for x in range(length)]
-    nodes = [item for sublist in nodes for item in sublist]
-    # set distances to inf
-    visited = {key:float('Inf') for key in nodes}
-    # start distance is 0
-    visited[start] = 0
+    for row in range(len(matrix)):
+        for col in range(len(matrix[0])):
+            shortest_path[( row, col )] = float('Inf')
+            unseenNodes.append(( row, col ))
+    shortest_path[start] = 0
 
-    # while time to explore
-    while nodes:
-        # find minNode
-        # find minNode
-        minNode = None
-        for node in nodes:
-            if minNode == None:
-                minNode = node
-            elif visited[node] < visited[minNode]:
-                minNode = node
+    while unseenNodes:
+        currentNode = None
+        for nodes in unseenNodes:
+            if currentNode is None:
+                currentNode = nodes
+            elif shortest_path[nodes] < shortest_path[currentNode]:
+                currentNode = nodes
 
+        unseenNodes.remove(currentNode)
+        current_weight = shortest_path[currentNode]
+        x, y = currentNode
+        neighbors = [(x, y+1), (x+1, y), (x-1, y), (x, y-1)]
 
-
-        nodes.remove(minNode)
-        current_weight = visited[minNode]
-
-        x,y = minNode
-        directions = [(x, y+1), (x, y-1), (x+1, y), (x-1, y)]
-
-        for cx,cy in directions:
-            if (cx,cy) in nodes:
+        for cx, cy in neighbors:
+            if (cx,cy) in unseenNodes:
                 weight = current_weight + matrix[cx][cy]
-                if weight < visited[(cx,cy)]:
-                    visited[(cx, cy)] = weight
-                    # child:parent
-                    path[(cx,cy)] = minNode
-    
+                if weight < shortest_path[( cx, cy )]:
+                    shortest_path[( cx, cy )] = weight
+                    exploring_weights[( cx, cy)] = weight
+                    parent[( cx, cy )] = currentNode
 
 
-        if minNode == goal:
-            path[cx,cy] = minNode
+
+        if currentNode == goal:
             break
+            #return shortest_path
 
-    currentNode = goal
-    while currentNode != start:
-        paths.insert(0,currentNode)
-        currentNode = path[currentNode]
+    path_done = goal
+
+    while path_done != start:
+        paths.insert(0,path_done)
+        path_done = parent[path_done]
+
+
 
     px, py = start
     for x,y in paths:
         if x > px:
-            spelled.append('down')
-        elif x < px:
             spelled.append('up')
+        elif x < px:
+            spelled.append('down')
         elif y < py:
-            spelled.append('left')
-        else:
             spelled.append('right')
+        else:
+            spelled.append('left')
         px,py = x,y
 
     return spelled
 
-
-
-
-
 g= [
-    [1,4,1,1],
-    [1,9,1,0],
-    [1,1,1,0]
+    [1,0,1,1],
+    [1,0,1,0],
+    [1,0,1,0]
     ]
 
 h = [
     [1, 20, 1, 2, 1, 1, 1, 1, 1, 1],
     [1, 90, 90, 90, 90, 90, 90, 90, 90, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ]
 
-print(cheapest_path(g,(0,0), (0,3)))
+print(cheapest_path([[1,9,1],[2,9,1],[2,1,1]], (0,0), (0,2)))
+
+# [1,9,1]
+# [2,9,1]
+# [2,1,1]
+
+#print(cheapest_path(g,(0,0), (2,0)))
+print("---%s seconds" %(time.time()- start_time))

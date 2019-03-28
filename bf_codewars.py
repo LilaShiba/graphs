@@ -26,12 +26,7 @@ def path_finder(a):
             for cx, cy, in (cx, cy-1), (cx, cy+1), (cx-1,cy), (cx+1,cy):
                 if (cx,cy) in unseenNodes:
                     x,y = u
-                # relax
-                    #     # if parent and child are same level
-                    # if matrix[cx][cy] == matrix[x][y]:
-                    #     climbs[(cx,cy)] = climbs[(x,y)]
-                    #     # if there is a cost
-                    # else:
+
                     diff = abs(matrix[cx][cy] - matrix[x][y])
                     if diff + climbs[(x,y)] < climbs[(cx,cy)]:
                         climbs[(cx,cy)] = diff + climbs[(x,y)]
