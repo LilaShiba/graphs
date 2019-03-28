@@ -1,37 +1,33 @@
+# a *
 import time
 start_time = time.time()
 def path_finder(matrix):
+
     matrix =  list(map(list, matrix.splitlines()))
+    start = (0,0,0)
     length = len(matrix)
-    start = (0,0)
     goal = (length-1, length-1)
-    visited = {}
-    nodes = []
-    matrix = [[int(y) for y in x] for x in matrix]
+    visited = {(0,0): 0}
+    unseenNodes = [start]
 
+    while unseenNodes:
+        unseenNodes = sorted(unseenNodes, key = lambda x: x[2])
+        x,y,_ = unseenNodes[0]
+        del unseenNodes[0]
+        current_weight = visited[(x,y)]
+        px, py = x,y
 
-    for x in range(length):
-        for y in range(length):
-            nodes.append((x,y))
-            visited[(x,y)] = float('Inf')
-    visited[(0,0)] = 0
-
-    while nodes:
-        minNode = None
-        minNode = min([(visited[(x,y)], (x,y)) for (x,y) in nodes])[1]
-
-        if minNode == goal:
+        if (x,y) == goal:
             return visited[goal]
 
-        nodes.remove(minNode)
-        current_weight = visited[minNode]
-
-        x,y = minNode
         directions = [(x, y+1), (x, y-1), (x+1, y), (x-1, y)]
-        for cx,cy in directions:
-            if (cx,cy) in nodes:
-                weight = visited[(x,y)] + abs(matrix[cx][cy]- matrix[x][y])
-                visited[(cx,cy)] = min(weight, visited[(cx,cy)])
+        real_neighbors = [(x,y) for (x,y) in directions if 0<= x < length and 0<= y < length]
+        for cx,cy in real_neighbors:
+            weight = visited[(x,y)] + abs(int(matrix[cx][cy])- int(matrix[x][y]))
+            z = weight + (abs(cx - goal[0]) + abs(cy - goal[1]))
+            if (cx,cy) not in visited or weight< visited[(cx,cy)]:
+                visited[(cx,cy)] = weight
+                unseenNodes.append((cx,cy,z))
 
 
 
