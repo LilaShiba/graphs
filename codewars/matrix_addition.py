@@ -13,8 +13,8 @@ b = [[3,4], [5,6], [0,0]]
 # print(matrix_addition(a,b))
 
 def matrix_addition(a, b):
-    for x in range(len(a)):
-        for y in range(len(a[x])):
-            a[x][y] = (a[x][y] + b[x][y])
+    for row in range(len(a)):
+        for idx in range(len(a[row])):
+            a[row][idx] = (a[row][idx] + b[row][idx])
     return a
 print(matrix_addition(a,b))

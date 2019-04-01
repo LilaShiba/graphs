@@ -62,7 +62,7 @@ def cheapest_path(matrix,start,goal):
             spelled.append('left')
         px,py = x,y
 
-    return spelled
+    return (spelled, len(paths))
 
 g= [
     [1,0,1,1],

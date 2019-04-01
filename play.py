@@ -37,6 +37,7 @@ def cheapest_path(matrix,start,goal):
 
 
     currentNode = goal
+    px, py = start
     while currentNode != start:
         paths.insert(0,currentNode)
         currentNode = path[currentNode]
@@ -53,7 +54,7 @@ def cheapest_path(matrix,start,goal):
             spelled.append('right')
         px,py = x,y
 
-    return spelled
+    return spelled, len(paths), len(path)
 
 
 
@@ -73,7 +74,10 @@ g= [
     [1,0,0]
     ]
 
-print(cheapest_path(g,(0,0), (1,2)))
-
-
+#print(cheapest_path(g,(0,0), (1,2)))
+print(cheapest_path([[1,9,1],[2,9,1],[2,1,1]], (0,0), (0,2)))
+# [1,9,1]
+# [2,9,1]
+# [2,1,1]
+#["down", "down", "right", "right", "up", "up"]
 print("---%s seconds" %(time.time()- start_time))
