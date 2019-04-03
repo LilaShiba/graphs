@@ -1,9 +1,10 @@
 # a *
 import time
+import random
 start_time = time.time()
 def path_finder(matrix):
 
-    matrix =  list(map(list, matrix.splitlines()))
+    #matrix =  list(map(list, matrix.splitlines()))
     start = (0,0,0)
     length = len(matrix)
     goal = (length-1, length-1)
@@ -33,7 +34,7 @@ def path_finder(matrix):
 
 
 
-
+matrix = [[random.randint(0,10) for x in range(100)]for y in range(100)]
 e = "\n".join([
   "700000",
   "077770",
@@ -43,5 +44,5 @@ e = "\n".join([
   "000007"
 ])
 
-print(path_finder(e))
+print(path_finder(matrix))
 print("--- %s seconds ---" % (time.time() - start_time))
