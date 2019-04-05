@@ -1,5 +1,5 @@
 # https://www.codewars.com/kata/path-finder-number-3-the-alpinist/train/python
-import time
+import time, heapq
 
 start_time = time.time()
 
@@ -10,21 +10,21 @@ def cheapest_path(matrix,start,goal):
     paths = []
     spelled = []
     x,y = start
-    unseenNodes = [(x,y,0)]
-
+    unseenNodes = [(0,x,y)]
+    heapq.heapify(unseenNodes)
 
     while unseenNodes:
-        unseenNodes = sorted(unseenNodes, key = lambda x: x[2])
-        x,y,_ = unseenNodes[0]
-        del unseenNodes[0]
+        heapq.heapify(unseenNodes)
+        minNode = heapq.heappop(unseenNodes)
+        _,x,y = minNode
         current_weight = visited[(x,y)]
-        px, py = x,y
 
         if (x,y) == goal:
             break
 
-        directions = [(x, y+1), (x, y-1), (x+1, y), (x-1, y)]
-        real_neighbors = [(x,y) for (x,y) in directions if 0<= x < length and 0<= y < len(matrix[0])]
+        px, py = x,y
+        directions = ((x, y+1), (x, y-1), (x+1, y), (x-1, y))
+        real_neighbors = ((x,y) for (x,y) in directions if 0<= x < length and 0<= y < len(matrix[0]))
 
         for cx,cy in real_neighbors:
             weight =  current_weight + matrix[cx][cy]
@@ -32,7 +32,7 @@ def cheapest_path(matrix,start,goal):
             if (cx,cy) not in visited or weight < visited[(cx,cy)]:
                 visited[(cx,cy)] = weight
                 path[(cx,cy)] = (px, py)
-                unseenNodes.append((cx,cy,z))
+                unseenNodes.append((z,cx,cy))
 
 
 

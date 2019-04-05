@@ -1,5 +1,5 @@
 import random, heapq, time
-start_time = time.time()
+matrix = [[x+1 for x in range(100)]for y in range(110)]
 
 def astar(matrix,source,target):
     length = len(matrix)
@@ -20,8 +20,8 @@ def astar(matrix,source,target):
             return shortest_path[target]
 
         px, py = x,y
-        directions = [(x+1,y), (x,y+1), (x-1,y), (x, y-1)]
-        real_neighbors = [(x,y) for (x,y) in directions if 0<= x < length and 0<= y < length]
+        directions = ((x+1,y), (x,y+1), (x-1,y), (x, y-1))
+        real_neighbors = ((x,y) for (x,y) in directions if 0<= x < length and 0<= y < length)
 
         for cx,cy in real_neighbors:
             weight = shortest_path[(x,y)] + matrix[cx][cy]
@@ -35,10 +35,8 @@ def astar(matrix,source,target):
 
     return (shortest_path)
 
+start_time = time.clock()
+print(astar(matrix, (0,0), (0,99)))
+end = time.clock()
 
-
-print(astar([[1,9,1],[2,9,1],[2,1,1]], (0,0), (0,2)))
-# [1,9,1]
-# [2,9,1]
-# [2,1,1]
-print("---%s seconds" %(time.time()- start_time))
+print(end - start_time)
