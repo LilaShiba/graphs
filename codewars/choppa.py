@@ -28,6 +28,9 @@ def find_shortest_path(grid, start_node, end_node):
     print(currentNode)
     px, py = start_node.position.x, start_node.position.y
     while currentNode != (start_node.position.x, start_node.position.y):
-        paths.insert(0,currentNode)
+        x,y = currentNode
+        obj_add = grid[x][y]
+        paths.insert(0,obj_add)
         currentNode = path[currentNode]
+    paths.insert(0,start_node)
     return paths
