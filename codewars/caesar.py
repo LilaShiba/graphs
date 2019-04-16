@@ -48,7 +48,11 @@ def decrypt(text,s):
   return encrypted
 
 
-print(decrypt('zy',25))
+
+
+print(encrypt('Meow', 1))
+print(encrypt('woof',5))
+print(encrypt('meow woof', 7))
 print(encrypt('Python Warrior',25))
 # def break_caesar(s, shift):
 #     s = s.lower()
