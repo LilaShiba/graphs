@@ -1,6 +1,8 @@
+# http://web.cs.ucdavis.edu/~bai/ECS122A/Closestpair.pdf
+# https://www.youtube.com/watch?v=xi-WF07rAQw
 import math
 # todo o nlogn time
-# merge sort to build up to this
+# Done: merge sort
 def brute_force(points):
     if len(points) == 2:
         return points
@@ -20,19 +22,19 @@ def brute_force(points):
         count +=1
     return(best)
 
-def merge_sort(arr):
+def merge_sort(arr, pos):
     if len(arr) > 1:
         mid = len(arr)//2
         l_half = arr[:mid]
         r_half = arr[mid:]
 
-        merge_sort(l_half)
-        merge_sort(r_half)
+        merge_sort(l_half, pos)
+        merge_sort(r_half, pos)
 
         li = ri = k = 0
-
+        # two pointers to stitch together new array
         while li < len(l_half) and ri < len(r_half):
-            if l_half[li] < r_half[ri]:
+            if l_half[li][pos] < r_half[ri][pos]:
                 arr[k] = l_half[li]
                 li +=1
             else:
@@ -52,18 +54,68 @@ def merge_sort(arr):
 
     return arr
 
-def divide_conquer(points):
-    mid = len(points)//2
-    left_half = points[:mid)]
-    right_half = points[mid:]
+def divide_conquer(arr_x):
+    if len(arr_x) == 2:
+        return arr_x
+    else:
+        # Begin to sort into two sub lists p & q sorted by x cords
+        # midpoint in arr as whole number
+        mid = len(arr_x)//2
+        p = arr_x[:mid]
+        q = arr_x[mid:]
+        # Divide
+        d1 = divide_conquer(p)
+        d2 = divide_conquer(q)
+        d = min(d1,d2)
+        #return d
+        # merge_sort
+        sy = merge_sort(arr_x,1)
+        best = 1000
+        for i in range(len(sy)-1):
+            for j in range(i+1, min(i+7, len(sy))):
+                pp,qq = sy[i], sy[j]
+                dst = (abs(sy[i][0]-sy[j][0]) + abs(sy[i][1]-sy[j][1]))
+                if dst < best:
+                    best = dst
+                    pts = (sy[i], sy[j])
+        return pts
+
+
+        # find closest point
+
+
+        # solve subproblems
+
+
+
+
 
 def closest_pair(points):
     if len(points) <= 3:
+        # no need for divide_conquer if n < 4
         return brute_force(points)
     else:
-        arr = list(points)
-        sorted_points = merge_sort(arr)
-        return divide_conquer(sorted_points)
+        # preprocess arrays to make life easier and faster
+
+        # sort by x cords & sort by y cords
+        arr_x = list(points)
+        arr_y = list(points)
+        # Do everything yourself because otherwise what do you learn?
+        # Run merge sort as it is O(nlogn)
+        # pass in arr and pos of where to sort, e.g. x or y
+        sorted_x = merge_sort(arr_x,0)
+        sorted_y = merge_sort(arr_y,1)
+
+        # the pythonic way
+        #sorted_x.sort(key=lambda x: x[0])
+        #sorted_y.sort(key=lambda x: x[1])
+
+        # Basic visual test passes
+        # print(sorted_x)
+        # print(sorted_y)
+
+        # pass the dirty work to
+        return divide_conquer(sorted_x)
 
 
 
@@ -76,7 +128,7 @@ points = (
             (4, 8), # B
             (9, 5), # C
             (3, 3), # D
-            (10, 7), # E
+            (10, 9), # E
             (2, 4), # F
             (7, 9),
             (10,10)  # G
@@ -97,4 +149,4 @@ points2 =(
 
 
 
-print(divide_conquer(points))
+print(closest_pair(points))
