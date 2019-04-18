@@ -1,4 +1,6 @@
 import random
+import pprint
+
 def bfs(maze, start, target):
     length = len(maze)
     frontier = [start]
@@ -19,7 +21,7 @@ def bfs(maze, start, target):
 
                     if (cx,cy) == end:
                         current_node = end
-                        path = []
+                        path = [start]
                         while current_node != start:
                             path.insert(0, current_node)
                             current_node = explored[current_node]
@@ -30,7 +32,14 @@ def bfs(maze, start, target):
     return False
 
 
+def paint_me(maze,path):
+    for index in path:
+        x,y = index
+        maze[x][y] = 'X'
+    return maze
+
 
 
 maze = [[random.randint(0,100)for x in range(10)]for y in range(10)]
-print(bfs(maze, (0,0),(9,9)))
+path = bfs(maze, (0,0),(9,9))
+pprint.pprint(paint_me(maze,path))

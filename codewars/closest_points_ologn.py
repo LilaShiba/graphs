@@ -55,24 +55,35 @@ def merge_sort(arr, pos):
     return arr
 
 def divide_conquer(arr_x):
-    if len(arr_x) == 2:
-        return arr_x
+    if len(arr_x) <= 3:
+        return brute_force(arr_x)
     else:
         # Begin to sort into two sub lists p & q sorted by x cords
         # midpoint in arr as whole number
         mid = len(arr_x)//2
         p = arr_x[:mid]
         q = arr_x[mid:]
-        # Divide
+
+
+       # Divide
+
         d1 = divide_conquer(p)
         d2 = divide_conquer(q)
+        # dirty hobits
+        if d1 == None:
+          d1 = ((100000000000, 100000000000), (100000000000, 100000000000))
+        if d2 == None:
+          d2 = ((100000000000, 100000000000), (100000000000, 100000000000))
+
+        print(d2)
+
         d = min(d1,d2)
         #return d
         # merge_sort
         sy = merge_sort(arr_x,1)
-        best = 1000
+        best = 100000000
         for i in range(len(sy)-1):
-            for j in range(i+1, min(i+7, len(sy))):
+            for j in range(i+1, len(sy)):
                 pp,qq = sy[i], sy[j]
                 dst = (abs(sy[i][0]-sy[j][0]) + abs(sy[i][1]-sy[j][1]))
                 if dst < best:
@@ -96,7 +107,6 @@ def closest_pair(points):
         return brute_force(points)
     else:
         # preprocess arrays to make life easier and faster
-
         # sort by x cords & sort by y cords
         arr_x = list(points)
         arr_y = list(points)

@@ -1,17 +1,16 @@
-import random
-def merge_sort(arr):
+def merge_sort(arr, pos):
     if len(arr) > 1:
         mid = len(arr)//2
         l_half = arr[:mid]
         r_half = arr[mid:]
 
-        merge_sort(l_half)
-        merge_sort(r_half)
+        merge_sort(l_half, pos)
+        merge_sort(r_half, pos)
 
         li = ri = k = 0
 
         while li < len(l_half) and ri < len(r_half):
-            if l_half[li] < r_half[ri]:
+            if l_half[li][pos] < r_half[ri][pos]:
                 arr[k] = l_half[li]
                 li +=1
             else:
@@ -25,12 +24,13 @@ def merge_sort(arr):
             li+=1
             k+=1
         while ri < len(r_half):
+            arr[k] = r_half[ri]
             ri+=1
             k+=1
+
     return arr
 
-arr = [random.randint(0,100000000) for x in range(2000)]
-points2 = (
+points2 = [
                 (4, 2), # A
                 (2, 8), # B
                 (5, 5), # C
@@ -39,5 +39,5 @@ points2 = (
                 (3, 7), # E
                 (2, 4), # F
                 (1, 9)  # G
-        )
-print(merge_sort(points2))
+        ]
+print(merge_sort(points2, 1))
