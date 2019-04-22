@@ -1,87 +1,58 @@
-import time
-start_time = time.time()
+def brute_force(points):
+    # Time Cost O(n2) of brute force
+    # transform into array
+    arr = list(points)
+    length = len(arr)
+    # best distance
+    best = (float('Inf'))
+    # closest pair of points
+    best_pair = None
+    # nested for loop to compare all points to each other
+    for i in range(length-1):
+        for j in range(i+1, length-1):
+            # get elements
+            man_distance =(abs(arr[i][0]-arr[j][0])+ abs(arr[i][1]-arr[j][1]))
+            # compare to best
+            if man_distance < best:
+                best = man_distance
+                best_pair = ((arr[i][0], arr[i][1]), (arr[j][0], arr[j][1]))
 
-def cheapest_path(matrix,start,goal):
-    shortest_path = {}
-    unseenNodes = []
-    exploring_weights = {}
-    parent = {}
-    paths = []
-    spelled = []
+    # return best
+    return best_pair, best
 
-    for row in range(len(matrix)):
-        for col in range(len(matrix[0])):
-            shortest_path[( row, col )] = float('Inf')
-            unseenNodes.append(( row, col ))
-    shortest_path[start] = 0
+def closest_pair_helper(x,y):
+    length_x = len(x)
 
-    while unseenNodes:
-        currentNode = None
-        for nodes in unseenNodes:
-            if currentNode is None:
-                currentNode = nodes
-            elif shortest_path[nodes] < shortest_path[currentNode]:
-                currentNode = nodes
+    if length_x <= 3:
+        return brute_force(x)
 
-        unseenNodes.remove(currentNode)
-        current_weight = shortest_path[currentNode]
-        x, y = currentNode
-        neighbors = [(x, y+1), (x+1, y), (x-1, y), (x, y-1)]
+    median = length//2
 
-        for cx, cy in neighbors:
-            if (cx,cy) in unseenNodes:
-                weight = current_weight + matrix[cx][cy]
-                if weight < shortest_path[( cx, cy )]:
-                    shortest_path[( cx, cy )] = weight
-                    exploring_weights[( cx, cy)] = weight
-                    parent[( cx, cy )] = currentNode
+    xl = []
+    xr = []
 
-
-
-        if currentNode == goal:
-            break
-            #return shortest_path
-
-    path_done = goal
-
-    while path_done != start:
-        paths.insert(0,path_done)
-        path_done = parent[path_done]
-
-
-
-    px, py = start
-    for x,y in paths:
-        if x > px:
-            spelled.append('up')
-        elif x < px:
-            spelled.append('down')
-        elif y < py:
-            spelled.append('right')
+    for cord_x in x:
+        if cord_x <= median:
+            xl.append(cord_x)
         else:
-            spelled.append('left')
-        px,py = x,y
+            xr.append(cord_x)
 
-    return (spelled, len(paths))
 
-g= [
-    [1,0,1,1],
-    [1,0,1,0],
-    [1,0,1,0]
-    ]
+def closest_pair(x,y):
+    # Merge Sort O(n lng N)
+    sorted_x.sort(key=lambda x: x[0])
+    sorted_y.sort(key=lambda x: x[1])
+    return closest_pair_helper(sorted_x,sorted_y)
 
-h = [
-    [1, 20, 1, 2, 1, 1, 1, 1, 1, 1],
-    [1, 90, 90, 90, 90, 90, 90, 90, 90, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ]
 
-print(cheapest_path([[1,9,1],[2,9,1],[2,1,1]], (0,0), (0,2)))
+test1 = (
+  (2,2), # A
+  (2,8), # B
+  (5,5), # C
+  (6,3), # D
+  (6,7), # E
+  (7,4), # F
+  (7,9)  # G
+)
 
-# [1,9,1]
-# [2,9,1]
-# [2,1,1]
-
-#print(cheapest_path(g,(0,0), (2,0)))
-print("---%s seconds" %(time.time()- start_time))
+print(closest_pair(test1))

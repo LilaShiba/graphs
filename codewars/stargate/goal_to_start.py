@@ -59,9 +59,7 @@ def wire_DHD_SG1(existingWires):
         real_neighbors = ((x,y) for (x,y) in directions if 0<= x < length and 0<= y < len(matrix[0]))
 
         for cx, cy in real_neighbors:
-            # euclidean_distance = sqrt( (plot1[0]-plot2[0])**2 + (plot1[1]-plot2[1])**2 )
-
-            weight_c = current_weight +math.sqrt( ((count - cx)**2) + ((pos - cy)**2))
+            weight_c = current_weight +( abs(count - cx) + abs(pos - cy))
             if ((cx,cy) not in parent or weight_c < weight[(cx,cy)]) and matrix[cx][cy] != 'X':
                         parent[(cx,cy)] = (px,py)
                         weight[(cx,cy)] = weight_c
@@ -70,37 +68,3 @@ def wire_DHD_SG1(existingWires):
 
     # Your code here!
     return "Oh for crying out loud..."
-
-
-meow = """
-XX.S.XXX..
-XXXX.X..XX
-...X.XX...
-XX...XXX.X
-....XXX...
-XXXX...XXX
-X...XX...X
-X...X...XX
-XXXXXXXX.X
-G........X
-""".strip('\n')
-
-meow2 = """
-.S...
-XXX..
-.X.XX
-..X..
-G...X
-""".strip('\n')
-
-meow3= """
-...
-SG.
-...
-""".strip('\n')
-pprint.pprint(wire_DHD_SG1(meow))
-pprint.pprint(wire_DHD_SG1(meow2))
-pprint.pprint(wire_DHD_SG1(meow3))
-
-# 'SX.\nXP.\nXXG\n' should equal
-# 'SX.\nXP.\nXXG'
