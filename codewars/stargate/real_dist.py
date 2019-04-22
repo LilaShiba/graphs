@@ -74,37 +74,3 @@ def wire_DHD_SG1(existingWires):
 
     # Your code here!
     return "Oh for crying out loud..."
-
-
-meow = """
-XX.S.XXX..
-XXXX.X..XX
-...X.XX...
-XX...XXX.X
-....XXX...
-XXXX...XXX
-X...XX...X
-X...X...XX
-XXXXXXXX.X
-G........X
-""".strip('\n')
-
-meow2 = """
-.S...
-XXX..
-.X.XX
-..X..
-G...X
-""".strip('\n')
-
-meow3= """
-...
-SG.
-...
-""".strip('\n')
-pprint.pprint(wire_DHD_SG1(meow))
-pprint.pprint(wire_DHD_SG1(meow2))
-pprint.pprint(wire_DHD_SG1(meow3))
-
-# 'SX.\nXP.\nXXG\n' should equal
-# 'SX.\nXP.\nXXG'
