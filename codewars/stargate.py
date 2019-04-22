@@ -2,7 +2,7 @@ import pprint, heapq, math
 def wire_DHD_SG1(existingWires):
     matrix =  list(map(list, existingWires.splitlines()))
     length = len(matrix)
-    # get start node
+    # get start node O(n)
     count = 0
     for x in matrix:
         try:
@@ -11,7 +11,7 @@ def wire_DHD_SG1(existingWires):
         except:
             pos = None
         count +=1
-
+    # get goal node O(n)
     gx = 0
     for x in matrix:
         try:
@@ -26,14 +26,14 @@ def wire_DHD_SG1(existingWires):
     parent = {}
     weight = {(count,pos):0}
     i = 1
+    # dijkstra O(E log V)
     while s:
         heapq.heapify(s)
         minNode = heapq.heappop(s)
-        print(minNode)
 
         current_weight,x,y = minNode
         px,py = x,y
-        # add end case here
+        # end case here
         if matrix[x][y] == 'G':
             currentNode = (gx,gy)
             while currentNode != (count,pos):
@@ -55,7 +55,7 @@ def wire_DHD_SG1(existingWires):
 
         for cx, cy in real_neighbors:
             weight_c = current_weight +( math.sqrt((cx - gx)**2 + (cy - gy)**2))
-            if (cx,cy) not in parent and matrix[cx][cy] != 'X':
+            if ((cx,cy) not in parent or weight_c <= weight[(cx,cy)]) and matrix[cx][cy] != 'X':
                         parent[(cx,cy)] = (px,py)
                         weight[(cx,cy)] = weight_c
                         s.append((weight_c,cx,cy))
