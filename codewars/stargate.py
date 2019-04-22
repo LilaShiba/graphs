@@ -1,4 +1,4 @@
-import pprint
+import pprint, heapq, math
 def wire_DHD_SG1(existingWires):
     matrix =  list(map(list, existingWires.splitlines()))
     length = len(matrix)
@@ -11,41 +11,56 @@ def wire_DHD_SG1(existingWires):
         except:
             pos = None
         count +=1
-    s = (count,pos)
 
-    # find start
-    level = {s: 0}
-    parent = {s: 0}
+    gx = 0
+    for x in matrix:
+        try:
+            gy = x.index('G')
+            break
+        except:
+            gy = None
+        gx +=1
+
+    s = [(0,count,pos)]
+    heapq.heapify(s)
+    parent = {}
+    weight = {(count,pos):0}
     i = 1
-    frontier = [s]
-    while frontier:
-        next = []
-        for u in frontier:
-            x,y = u
-            for x, y in (x, y-1), (x, y+1), (x-1, y), (x+1, y), (x-1,y-1), (x+1, y+1), (x-1,y+1), (x+1,y-1):
-                if 0 <= x < length and 0 <= y < length:
-                    if (x,y) not in level and matrix[x][y] != 'X':
-                        level[(x,y)] = i
-                        px,py = u
-                        parent[(x,y)] = (px,py)
-                        next.append((x,y))
-                        if matrix[x][y] == 'G':
+    while s:
+        heapq.heapify(s)
+        minNode = heapq.heappop(s)
+        print(minNode)
 
-                            currentNode = parent[(x,y)]
-                            while currentNode != s:
-                                cx,cy = currentNode
-                                matrix[cx][cy] = 'P'
-                                currentNode = parent[currentNode]
-                            strg = ''
-                            for x in matrix:
-                                x = ''.join(x)
-                                strg+= x + '\n'
-                            strg = str(strg)
+        current_weight,x,y = minNode
+        px,py = x,y
+        # add end case here
+        if matrix[x][y] == 'G':
+            currentNode = (gx,gy)
+            while currentNode != (count,pos):
+                cx,cy = currentNode
+                matrix[cx][cy] = 'P'
+                currentNode = parent[currentNode]
+                matrix[gx][gy] = 'G'
+                matrix[count][pos] = 'S'
+            strg = ''
+            for x in matrix:
+                x = ''.join(x)
+                strg+= x + '\n'
+                strg = str(strg)
 
-                            return strg[:-1]
+            return strg[:-1]
 
-        frontier = next
-        i += 1
+        directions = ((x, y-1), (x, y+1), (x-1, y), (x+1, y), (x-1,y-1), (x+1, y+1), (x-1,y+1), (x+1,y-1))
+        real_neighbors = ((x,y) for (x,y) in directions if 0<= x < length and 0<= y < len(matrix[0]))
+
+        for cx, cy in real_neighbors:
+            weight_c = current_weight +( math.sqrt((cx - gx)**2 + (cy - gy)**2))
+            if (cx,cy) not in parent and matrix[cx][cy] != 'X':
+                        parent[(cx,cy)] = (px,py)
+                        weight[(cx,cy)] = weight_c
+                        s.append((weight_c,cx,cy))
+
+
     # Your code here!
     return "Oh for crying out loud..."
 
