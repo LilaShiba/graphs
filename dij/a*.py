@@ -1,4 +1,5 @@
-import time,heapq,random
+#import heapq
+import time,random
 start_time = time.time()
 
 def path_finder(matrix):
@@ -32,7 +33,7 @@ def path_finder(matrix):
                 parent[(cx,cy)] = (px,py)
 
                 if (x,y) == goal:
-                    return ('cost is', visited[goal] + matrix[x][y])
+                    return (visited[goal] + matrix[x][y])
 
 
 import random, pprint
