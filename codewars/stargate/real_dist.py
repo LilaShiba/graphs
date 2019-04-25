@@ -59,7 +59,7 @@ def wire_DHD_SG1(existingWires):
         real_neighbors = ((x,y) for (x,y) in directions if 0<= x < length and 0<= y < len(matrix[0]))
 
         for cx, cy in real_neighbors:
-            # make sure you don't over esitmate
+            # make sure you don't over 
             delta_x = abs(count - cx)
             delta_y = abs(pos - cy)
             cost =  min(delta_x, delta_y) * math.sqrt(2) + abs(delta_x - delta_y)

@@ -118,3 +118,12 @@ pprint.pprint(wire_DHD_SG1(meow3))
 
 # 'SX.\nXP.\nXXG\n' should equal
 # 'SX.\nXP.\nXXG'
+
+
+search = input
+count = 0
+for x in stack:
+    if stack.pop(x) == search:
+
+        print count
+    count += 1

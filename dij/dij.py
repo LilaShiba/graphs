@@ -39,7 +39,7 @@ def path_finder(matrix):
 
 
 import random, pprint
-matrix = [[x + 1 for x in range(100)] for y in range(100)]
+matrix = [[x + 1 for x in range(1000)] for y in range(1000)]
 
 print(path_finder(matrix))
 print("--- %s seconds ---" % (time.time() - start_time))

@@ -1,58 +1,41 @@
-def brute_force(points):
-    # Time Cost O(n2) of brute force
-    # transform into array
-    arr = list(points)
-    length = len(arr)
-    # best distance
-    best = (float('Inf'))
-    # closest pair of points
-    best_pair = None
-    # nested for loop to compare all points to each other
-    for i in range(length-1):
-        for j in range(i+1, length-1):
-            # get elements
-            man_distance =(abs(arr[i][0]-arr[j][0])+ abs(arr[i][1]-arr[j][1]))
-            # compare to best
-            if man_distance < best:
-                best = man_distance
-                best_pair = ((arr[i][0], arr[i][1]), (arr[j][0], arr[j][1]))
+def path_finder(matrix):
+    # input 2D array full of intergers
+    # interger element = cost of movement
+    length = len(matrix)
+    goal = (length-1,length-1)
+    start = (0,0,0)
+    # store the cost of a node
+    visited = {(0,0): 0}
+    unexplored = [start]
+    parent = {}
 
-    # return best
-    return best_pair, best
+    while unexplored:
+        # sort by weight
+        unexplored = sorted(unexplored, key = lambda x: x[2])
+        # smallest weighted vertex from unexplored
+        minNode = unexplored.pop(0)
 
-def closest_pair_helper(x,y):
-    length_x = len(x)
+        x,y,current_weight = minNode
 
-    if length_x <= 3:
-        return brute_force(x)
+        # parent node or child node
+        px,py = x,y
 
-    median = length//2
+        # end program
+        if (px,py) == goal:
+            return visited[goal] + matrix[px][py]
 
-    xl = []
-    xr = []
+        # neighbors
+        neighbors = ( (x-1,y), (x+1,y), (x,y-1), (x, y+1) )
+        # make sure you are in the bound of the maze
+        real_neighbors = ( (x,y) for (x,y) in neighbors if 0 <= x < length and 0 <= y < len(matrix[0]) )
 
-    for cord_x in x:
-        if cord_x <= median:
-            xl.append(cord_x)
-        else:
-            xr.append(cord_x)
+        for cx,cy in real_neighbors:
+            cost = current_weight + matrix[cx][cy]
+            if (cx,cy) not in parent or cost < visited[(cx,cy)]:
+                visited[(cx,cy)] = cost
+                parent[(cx,cy)] = (px,py)
+                unexplored.append((cx,cy,cost))
 
-
-def closest_pair(x,y):
-    # Merge Sort O(n lng N)
-    sorted_x.sort(key=lambda x: x[0])
-    sorted_y.sort(key=lambda x: x[1])
-    return closest_pair_helper(sorted_x,sorted_y)
-
-
-test1 = (
-  (2,2), # A
-  (2,8), # B
-  (5,5), # C
-  (6,3), # D
-  (6,7), # E
-  (7,4), # F
-  (7,9)  # G
-)
-
-print(closest_pair(test1))
+import random
+arr = [[x + 1 for x in range(100)] for y in range(100)]
+print(path_finder(arr))
