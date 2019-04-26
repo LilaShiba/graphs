@@ -1,4 +1,4 @@
-def dij_win(graph, num, start):
+def dij_win(graph, num, start, votes):
     dist_num = num
     length = len(graph)
     parent = {}
@@ -10,6 +10,14 @@ def dij_win(graph, num, start):
     voters = 0
     nonvoters = 0
 
+    if votes == 4:
+        win_votes = 4
+        lose_votes = 1
+    elif votes == 3:
+        win_votes = 3
+        lose_votes = 2
+
+
     if graph[sx][sy] == 'O':
         voters += 1
         graph[sx][sy] = dist_num
@@ -17,15 +25,14 @@ def dij_win(graph, num, start):
         nonvoters += 1
         graph[sx][sy] = dist_num
 
-    while voters < 3 or nonvoters < 2:
-        unexplored = sorted(unexplored, key=lambda x: x[2])
+    while voters < win_votes or nonvoters < lose_votes:
+        #unexplored = sorted(unexplored, key=lambda x: x[2])
         minNode = unexplored.pop(0)
-        print(minNode)
 
         x,y,_ = minNode
         px,py = x,y
 
-        neighbors = ( (x-1,y), (x+1,y), (x,y-1), (x,y+1) )
+        neighbors = ( (x+1,y), (x-1,y), (x,y+1), (x,y-1) )
         real_neighbors = ( (x,y) for (x,y) in neighbors if 0<= x < length and 0 <= y < length)
 
         for cx,cy in real_neighbors:
@@ -37,11 +44,11 @@ def dij_win(graph, num, start):
             else:
                 cost = 2
 
-            if cost == 0 and voters < 3:
+            if cost == 0 and voters < win_votes:
                 unexplored.append((cx,cy,cost))
                 graph[cx][cy] = dist_num
                 voters +=1
-            elif cost == 1 and nonvoters < 2:
+            elif cost == 1 and nonvoters < lose_votes:
                 unexplored.append((cx,cy,cost))
                 graph[cx][cy] = dist_num
                 nonvoters += 1
@@ -58,9 +65,9 @@ def gerrymander(s):
     for x in s:
         x = list(x)
         matrix.append(x)
-    one = dij_win(matrix,'1', (0,0))
-    two = dij_win(one,'2',(2,2))
-    three = dij_win(two,'3',(4,0))
+    one = dij_win(matrix,'1', (0,0),4)
+    two = dij_win(one,'2',(2,2),3)
+    three = dij_win(two,'3',(4,2),3)
 
     # solve
     #  Voronoi Approach
