@@ -16,6 +16,10 @@ def dij_win(graph, num, start, votes):
     elif votes == 3:
         win_votes = 3
         lose_votes = 2
+    elif votes == 5:
+        win_votes = 0
+        lose_votes = 5
+
 
 
     if graph[sx][sy] == 'O':
@@ -61,6 +65,8 @@ def dij_win(graph, num, start, votes):
 
 def gerrymander(s):
     # transform into 2D array
+    #matrix = list(map(list, s.splitlines()))
+
     matrix = []
     for x in s:
         x = list(x)
@@ -68,6 +74,8 @@ def gerrymander(s):
     one = dij_win(matrix,'1', (0,0),4)
     two = dij_win(one,'2',(2,2),3)
     three = dij_win(two,'3',(4,2),3)
+    four = dij_win(three,'4',(4,4),5)
+    five = dij_win(four,'5',(1,2),5)
 
     # solve
     #  Voronoi Approach
@@ -79,7 +87,7 @@ def gerrymander(s):
 
     # return ans
     ans = []
-    for x in three:
+    for x in four:
         new_x = ''.join(x)
         ans.append(new_x)
     ans = '\n'.join(ans)
