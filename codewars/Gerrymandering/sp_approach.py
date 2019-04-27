@@ -1,3 +1,4 @@
+import pprint
 def dij_win(graph, num, start, votes):
     dist_num = num
     length = len(graph)
@@ -52,14 +53,20 @@ def dij_win(graph, num, start, votes):
                 unexplored.append((cx,cy,cost))
                 graph[cx][cy] = dist_num
                 voters +=1
+                parent[(cx,cy)] = (px,py)
             elif cost == 1 and nonvoters < lose_votes:
                 unexplored.append((cx,cy,cost))
                 graph[cx][cy] = dist_num
                 nonvoters += 1
+                parent[(cx,cy)] = (px,py)
             else:
-                pass
-    print(graph)
-    return graph
+                unexplored.append((cx,cy,cost))
+
+            end_node = (x,y)
+
+    pprint.pprint(graph)
+    print(end_node)
+    return graph, end_node
 
 
 
@@ -71,11 +78,11 @@ def gerrymander(s):
     for x in s:
         x = list(x)
         matrix.append(x)
-    one = dij_win(matrix,'1', (0,0),4)
-    two = dij_win(one,'2',(2,2),3)
-    three = dij_win(two,'3',(4,2),3)
-    four = dij_win(three,'4',(4,4),5)
-    five = dij_win(four,'5',(1,2),5)
+    one,nodes = dij_win(matrix,'1', (0,0),4)
+    two,nodes = dij_win(one,'2',nodes,3)
+    three,nodes = dij_win(two,'3',nodes,3)
+    four,nodes = dij_win(three,'4',nodes,5)
+    five = dij_win(four,'5',nodes,5)
 
     # solve
     #  Voronoi Approach
@@ -84,10 +91,10 @@ def gerrymander(s):
 
 
 
-
+    loop,_ = five
     # return ans
     ans = []
-    for x in four:
+    for x in loop:
         new_x = ''.join(x)
         ans.append(new_x)
     ans = '\n'.join(ans)
