@@ -1,4 +1,3 @@
-import pprint
 def dij_win(graph, num, start, votes):
     dist_num = num
     length = len(graph)
@@ -39,9 +38,9 @@ def dij_win(graph, num, start, votes):
 
         neighbors = ( (x+1,y), (x-1,y), (x,y+1), (x,y-1) )
         real_neighbors = ( (x,y) for (x,y) in neighbors if 0<= x < length and 0 <= y < length)
-        last_boy = []
+
         for cx,cy in real_neighbors:
-            temp = []
+
             if graph[cx][cy] == 'O':
                 cost = 0
             elif graph[cx][cy] == 'X':
@@ -53,40 +52,29 @@ def dij_win(graph, num, start, votes):
                 unexplored.append((cx,cy,cost))
                 graph[cx][cy] = dist_num
                 voters +=1
-                last_boy.append((cx,cy))
+                parent[(cx,cy)] = (px,py)
             elif cost == 1 and nonvoters < lose_votes:
                 unexplored.append((cx,cy,cost))
                 graph[cx][cy] = dist_num
                 nonvoters += 1
-                last_boy.append((cx,cy))
+                parent[(cx,cy)] = (px,py)
             else:
-                if (cx,cy,cost) not in unexplored:
-                    temp.append((cx,cy,cost))
-                    last_boy.append((cx,cy))
-                else:
-                    temp.append((0,4,0))
+                unexplored.append((cx,cy,cost))
 
             end_node = (x,y)
 
-        if len(unexplored) == 0 and (voters != win_votes or nonvoters != lose_votes):
-            unexplored = temp
-
-
-    #end_node = last_boy[-1]
-    pprint.pprint(graph)
-    print(end_node)
     return graph, end_node
 
 
 
 def gerrymander(s):
     # transform into 2D array
-    #matrix = list(map(list, s.splitlines()))
+    matrix = list(map(list, s.splitlines()))
 
-    matrix = []
-    for x in s:
-        x = list(x)
-        matrix.append(x)
+#     matrix = []
+#     for x in s:
+#         x = list(x)
+#         matrix.append(x)
     one,nodes = dij_win(matrix,'1', (0,0),4)
     two,nodes = dij_win(one,'2',nodes,3)
     three,nodes = dij_win(two,'3',nodes,3)
@@ -108,15 +96,3 @@ def gerrymander(s):
         ans.append(new_x)
     ans = '\n'.join(ans)
     return ans
-
-
-
-example_test =[
-		'OOXXX',
-		'OOXXX',
-		'OOXXX',
-		'OOXXX',
-		'OOXXX'
-        ]
-
-print(gerrymander(example_test))
