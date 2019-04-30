@@ -30,7 +30,7 @@ def dij_win(graph, num, start, votes):
         graph[sx][sy] = dist_num
 
     while voters < win_votes or nonvoters < lose_votes:
-        #unexplored = sorted(unexplored, key=lambda x: x[2])
+        unexplored = sorted(unexplored, key=lambda x: x[2])
         minNode = unexplored.pop(0)
 
         x,y,_ = minNode

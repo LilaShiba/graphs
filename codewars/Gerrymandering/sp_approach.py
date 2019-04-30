@@ -31,7 +31,7 @@ def dij_win(graph, num, start, votes):
         graph[sx][sy] = dist_num
 
     while voters < win_votes or nonvoters < lose_votes:
-        #unexplored = sorted(unexplored, key=lambda x: x[2])
+        unexplored = sorted(unexplored, key=lambda x: x[2])
         minNode = unexplored.pop(0)
 
         x,y,_ = minNode
@@ -40,8 +40,9 @@ def dij_win(graph, num, start, votes):
         neighbors = ( (x+1,y), (x-1,y), (x,y+1), (x,y-1) )
         real_neighbors = ( (x,y) for (x,y) in neighbors if 0<= x < length and 0 <= y < length)
         last_boy = []
+        temp = []
         for cx,cy in real_neighbors:
-            temp = []
+
             if graph[cx][cy] == 'O':
                 cost = 0
             elif graph[cx][cy] == 'X':
@@ -64,7 +65,7 @@ def dij_win(graph, num, start, votes):
                     temp.append((cx,cy,cost))
                     last_boy.append((cx,cy))
                 else:
-                    temp.append((0,4,0))
+                    temp.append((cx,cy,5))
 
             end_node = (x,y)
 
@@ -87,7 +88,7 @@ def gerrymander(s):
     for x in s:
         x = list(x)
         matrix.append(x)
-    one,nodes = dij_win(matrix,'1', (0,0),4)
+    one,nodes = dij_win(matrix,'1', (2,2),4)
     two,nodes = dij_win(one,'2',nodes,3)
     three,nodes = dij_win(two,'3',nodes,3)
     four,nodes = dij_win(three,'4',nodes,5)
@@ -118,5 +119,12 @@ example_test =[
 		'OOXXX',
 		'OOXXX'
         ]
+
+test2 =[
+		'XOXOX',
+		'OXXOX',
+		'XXOXX',
+		'XOXOX',
+		'OOXOX'],
 
 print(gerrymander(example_test))
