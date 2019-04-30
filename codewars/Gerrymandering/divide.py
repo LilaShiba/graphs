@@ -1,48 +1,53 @@
 import pprint
+wins_total = 0
+o_amount = 4
 def get_district(matrix, points, num):
-
+    global wins_total
+    global o_amount
     x,y = points
     count = [0,0]
     last = []
+    local_o = 0
 
     if matrix[x][y] == 'O':
         count[0] += 1
-        y_count = 3
-        n_count = 2
 
     elif matrix[x][y] == 'X':
         count[1] += 1
-        n_count = 5
-        y_count = 1
 
     matrix[x][y] = num
 
     queue = [points]
-    t_count = 1
     while queue:
-
         node = queue.pop(0)
         x,y = node
-        neighbors = ( (x-1,y), (x+1,y), (x,y-1), (x,y+1) )
+        neighbors = ( (x+1,y), (x-1,y), (x,y+1), (x,y-1) )
         real_neighbors = ( (x,y) for (x,y) in neighbors if 0<= x < 5 and 0<= y < 5 )
 
         for cx,cy in real_neighbors:
-            if matrix[cx][cy] == 'O' and count[1] < n_count and y_count <= 3:
+            if matrix[cx][cy] == 'O' and count[0] + count[1] < 5 and count[0] < o_amount:
+
                 count[0] += 1
                 matrix[cx][cy] = num
-                y_count +=1
                 queue.append((cx,cy))
-            elif matrix[cx][cy] == 'X' and count[1] < n_count and t_count < 5:
+                local_o +=1
+                if count[0] == 3:
+                    wins_total += 1
+                if local_o == 4:
+                    o_amount = 3
+
+            elif matrix[cx][cy] == 'X' and count[0] + count[1] < 5:
                 count[1] += 1
                 matrix[cx][cy] = num
-                t_count += 1
                 queue.append((cx,cy))
+
     return matrix
 
 
 
 def gerrymander(s):
     # make matrix
+    global wins_total
     unchecked_nodes = []
     for x in s:
         x = list(x)
@@ -56,13 +61,13 @@ def gerrymander(s):
     p5 = (2,2)
     num = 1
     # push from left to right
-    p1_ans = get_district(unchecked_nodes, (0,0), num)
+    p1_ans = get_district(unchecked_nodes, p1, num)
     p2_ans = get_district(p1_ans, p2, 2)
     p3_ans = get_district(p2_ans,p3,3)
     p4_ans = get_district(p3_ans,p4,4)
     p5_ans = get_district(p4_ans,p5,5)
     pprint.pprint(p5_ans)
-
+    return(p5_ans)
     # ans = []
     # for x in loop:
     #     new_x = ''.join(x)
@@ -73,7 +78,7 @@ def gerrymander(s):
 
 
 
-example_test =[
+test1 =[
 		'OOXXX',
 		'OOXXX',
 		'OOXXX',
@@ -81,4 +86,11 @@ example_test =[
 		'OOXXX'
         ]
 
-print(gerrymander(example_test))
+test2 = [
+    'XOXOX',
+    'OXXOX',
+    'XXOXX',
+    'XOXOX',
+    'OOXOX'
+    ]
+print(gerrymander(test2))
