@@ -60,8 +60,11 @@ root = Node(100)
 root.insert(98)
 root.insert(50)
 root.insert(1984)
+root.insert(143)
+root.insert(54)
+root.insert(2001)
+root.insert(501)
+print(root.data)
 #root.print_tree()
 print(root.find(501))
 print(root.make_array(arr=[]))
-
-#root.find(50) => idx, -1
