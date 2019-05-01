@@ -33,19 +33,26 @@ class Node():
 
     def find(self,data):
         if data == self.data:
-            print(True)
             return True
         elif self.data:
             if data < self.data:
                 if self.left == None:
-                    print(False)
                     return False
                 return self.left.find(data)
             elif data > self.data:
                 if self.right == None:
-                    print(False)
                     return False
                 return self.right.find(data)
+
+    def make_array(self, arr):
+        if self.left:
+            self.left.make_array(arr)
+        arr.append(self.data)
+        if self.right:
+            self.right.make_array(arr)
+        return arr
+
+
 
 
 
@@ -54,6 +61,7 @@ root.insert(98)
 root.insert(50)
 root.insert(1984)
 #root.print_tree()
-root.find(50)
+print(root.find(501))
+print(root.make_array(arr=[]))
 
 #root.find(50) => idx, -1
