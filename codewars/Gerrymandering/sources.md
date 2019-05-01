@@ -11,3 +11,5 @@
 [youtube](https://www.youtube.com/watch?v=mPWVG6mCu80)
 
 [greedy approach](https://www.youtube.com/watch?v=h7i5FHf0Mxg)
+
+[annealing](https://stackoverflow.com/questions/51640083/partitioning-a-colored-grid)

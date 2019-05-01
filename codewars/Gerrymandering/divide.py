@@ -59,21 +59,20 @@ def gerrymander(s):
     p3 = (4,4)
     p4 = (0,4)
     p5 = (2,2)
-    num = 1
     # push from left to right
-    p1_ans = get_district(unchecked_nodes, p1, num)
-    p2_ans = get_district(p1_ans, p2, 2)
-    p3_ans = get_district(p2_ans,p3,3)
-    p4_ans = get_district(p3_ans,p4,4)
-    p5_ans = get_district(p4_ans,p5,5)
-    pprint.pprint(p5_ans)
-    return(p5_ans)
-    # ans = []
-    # for x in loop:
-    #     new_x = ''.join(x)
-    #     ans.append(new_x)
-    # ans = '\n'.join(ans)
-    # return ans
+    p1_ans = get_district(unchecked_nodes, p1, '1')
+    p2_ans = get_district(p1_ans, p2, '2')
+    p3_ans = get_district(p2_ans,p3,'3')
+    p4_ans = get_district(p3_ans,p4,'4')
+    p5_ans = get_district(p4_ans,p5,'5')
+    #pprint.pprint(p5_ans)
+    #return(p5_ans)
+    ans = []
+    for x in p5_ans:
+        new_x = ''.join(x)
+        ans.append(new_x)
+    ans = '\n'.join(ans)
+    return ans
 
 
 
