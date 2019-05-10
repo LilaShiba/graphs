@@ -62,12 +62,12 @@ def merge_sort(arr, pos):
 def cp_helper(X,Y):
   length = len(X)
   # base case
-
   if length <= 3:
     return brute_force(X)
 
   # get median
   mid = (length)//2
+
   # sort x cords by pos to median
   xl = X[:mid]
   xr = X[mid:]
