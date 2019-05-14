@@ -21,7 +21,7 @@ def get_stock_symbol():
 # apply user choice to make a custom api call
 def create_url(symbol):
     #api key
-    api_token = "YOUR KEY HERE"
+    api_token = "AH2JFP3LQ9R00HZX"
     #api call (request info from api) and url
     #url = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=MSFT&apikey=demo'
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol='+symbol+'&interval=1min&apikey='+api_token

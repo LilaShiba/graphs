@@ -10,3 +10,10 @@ class City:
         xdis = self.x - city.x
         ydis = self.y - city.y
         dis = np.sqrt((xdis ** 2) + (ydis ** 2))
+
+    def __repr__(self):
+        return "(" + str(self.x) + "," + str(self.y) + ")"
+
+class Fitness:
+    def __init__(self, route):
+        self.route = route
