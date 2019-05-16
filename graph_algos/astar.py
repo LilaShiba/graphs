@@ -1,4 +1,4 @@
-#import heapq
+import heapq
 import time,random
 start_time = time.time()
 
@@ -11,12 +11,12 @@ def path_finder(matrix):
     parent = {}
     visited = {(0,0): 0}
     unseenNodes = [start]
-    #heapq.heapify(unseenNodes)
+    heapq.heapify(unseenNodes)
 
     while unseenNodes:
-        #minNode = heapq.heappop(unseenNodes)
-        unseenNodes = sorted(unseenNodes, key = lambda x: x[3])
-        minNode = unseenNodes.pop(0)
+        minNode = heapq.heappop(unseenNodes)
+        #unseenNodes = sorted(unseenNodes, key = lambda x: x[3])
+        #minNode = unseenNodes.pop(0)
 
         x,y,current_weight,_ = minNode
         px, py = x,y
@@ -37,7 +37,7 @@ def path_finder(matrix):
 
 
 import random, pprint
-matrix = [[x + 1 for x in range(1000)] for y in range(1000)]
+matrix = [[x + 1 for x in range(10000)] for y in range(10000)]
 
 print(path_finder(matrix))
 print("--- %s seconds ---" % (time.time() - start_time))
